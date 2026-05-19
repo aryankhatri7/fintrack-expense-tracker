@@ -1,0 +1,110 @@
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts"
+
+const data = [
+  {
+    day: "Mon",
+    spending: 120,
+  },
+
+  {
+    day: "Tue",
+    spending: 98,
+  },
+
+  {
+    day: "Wed",
+    spending: 210,
+  },
+
+  {
+    day: "Thu",
+    spending: 160,
+  },
+
+  {
+    day: "Fri",
+    spending: 280,
+  },
+
+  {
+    day: "Sat",
+    spending: 320,
+  },
+
+  {
+    day: "Sun",
+    spending: 190,
+  },
+]
+
+function WeeklySpendingChart() {
+  return (
+  <div className="bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl p-6 transition-all duration-300">
+
+    <div className="mb-6">
+
+      <h2 className="text-slate-900 dark:text-white text-2xl font-bold">
+        Weekly Spending
+      </h2>
+
+      <p className="text-slate-600 dark:text-white/50 mt-1">
+        Daily expense tracking overview
+      </p>
+
+    </div>
+
+    <div className="h-[350px]">
+
+      <ResponsiveContainer width="100%" height="100%">
+
+        <LineChart data={data}>
+
+          <XAxis
+            dataKey="day"
+            stroke="#94a3b8"
+          />
+
+          <YAxis
+            stroke="#94a3b8"
+          />
+
+          <Tooltip
+            contentStyle={{
+              background: "#0f172a",
+              border: "1px solid rgba(255,255,255,0.1)",
+              borderRadius: "16px",
+              color: "#fff",
+            }}
+          />
+
+          <Line
+            type="monotone"
+            dataKey="spending"
+            stroke="#8B5CF6"
+            strokeWidth={4}
+            dot={{
+              r: 5,
+            }}
+            activeDot={{
+              r: 8,
+            }}
+          />
+
+        </LineChart>
+
+      </ResponsiveContainer>
+
+    </div>
+
+  </div>
+)
+}
+
+export default WeeklySpendingChart

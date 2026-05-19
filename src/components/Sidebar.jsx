@@ -1,0 +1,153 @@
+import {
+  FiHome,
+  FiPieChart,
+  FiCreditCard,
+  FiDollarSign,
+  FiSettings,
+  FiMenu,
+  FiX,
+} from "react-icons/fi"
+
+import {
+  NavLink,
+} from "react-router-dom"
+
+import { useState } from "react"
+
+const navItems = [
+  {
+    name: "Dashboard",
+    path: "/",
+    icon: <FiHome />,
+  },
+
+  {
+    name: "Analytics",
+    path: "/analytics",
+    icon: <FiPieChart />,
+  },
+
+  {
+    name: "Transactions",
+    path: "/transactions",
+    icon: <FiCreditCard />,
+  },
+
+  {
+    name: "Budget",
+    path: "/budget",
+    icon: <FiDollarSign />,
+  },
+
+  {
+    name: "Settings",
+    path: "/settings",
+    icon: <FiSettings />,
+  },
+]
+
+function Sidebar() {
+
+  const [open, setOpen] =
+    useState(false)
+
+  return (
+    <>
+
+      <button
+        onClick={() =>
+          setOpen(true)
+        }
+        className="lg:hidden fixed top-5 left-5 z-50 p-3 rounded-2xl bg-violet-600 text-white shadow-lg"
+      >
+
+        <FiMenu size={22} />
+
+      </button>
+
+      <div
+        onClick={() =>
+          setOpen(false)
+        }
+        className={`fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-all duration-300 lg:hidden ${
+          open
+            ? "opacity-100 visible"
+            : "opacity-0 invisible"
+        }`}
+      />
+
+      <aside
+        className={`fixed lg:static top-0 left-0 z-50 w-72 min-h-screen p-6 border-r transition-all duration-300
+
+        bg-white dark:bg-slate-900
+        border-black/10 dark:border-white/10
+
+        ${
+          open
+            ? "translate-x-0"
+            : "-translate-x-full lg:translate-x-0"
+        }
+      `}
+      >
+
+        <div className="flex items-center justify-between mb-10">
+
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+            FinTrack
+          </h1>
+
+          <button
+            onClick={() =>
+              setOpen(false)
+            }
+            className="lg:hidden text-slate-700 dark:text-white"
+          >
+
+            <FiX size={24} />
+
+          </button>
+
+        </div>
+
+        <nav className="space-y-3">
+
+          {navItems.map((item) => (
+
+            <NavLink
+              key={item.name}
+              to={item.path}
+              onClick={() =>
+                setOpen(false)
+              }
+
+              className={({ isActive }) =>
+                `flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 font-medium
+
+                ${
+                  isActive
+                    ? "bg-violet-600 text-white shadow-lg shadow-violet-500/20"
+                    : "text-slate-700 dark:text-white hover:bg-black/5 dark:hover:bg-white/5"
+                }
+              `
+              }
+            >
+
+              <span className="text-xl">
+                {item.icon}
+              </span>
+
+              {item.name}
+
+            </NavLink>
+
+          ))}
+
+        </nav>
+
+      </aside>
+
+    </>
+  )
+}
+
+export default Sidebar

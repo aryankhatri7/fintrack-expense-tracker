@@ -52,15 +52,7 @@ function Sidebar({
   return (
     <>
     
-      {/* Hamburger Button */}
-      <button
-        onClick={() =>
-          setSidebarOpen(true)
-        }
-        className="lg:hidden fixed top-5 left-5 z-50 p-3 rounded-2xl bg-violet-600 text-white shadow-lg"
-      >
-        <FiMenu size={22} />
-      </button>
+  
 
       {/* Overlay */}
       <div

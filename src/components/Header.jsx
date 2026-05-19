@@ -10,7 +10,7 @@ function Header({
 
   return (
 
-    <header className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
+    <header className="flex items-center justify-between gap-4 mb-8">
 
       <div className="flex items-center gap-4">
 
@@ -27,7 +27,7 @@ function Header({
 
         <div>
 
-          <h2 className="text-3xl font-bold text-slate-900 dark:text-white transition-all duration-300">
+          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white transition-all duration-300">
             Dashboard
           </h2>
 
@@ -39,7 +39,7 @@ function Header({
 
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 md:gap-4">
 
         <div className="hidden md:flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all duration-300 bg-black/[0.03] dark:bg-white/5 border-black/10 dark:border-white/10">
 

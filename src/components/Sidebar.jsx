@@ -12,8 +12,6 @@ import {
   NavLink,
 } from "react-router-dom"
 
-import { useState } from "react"
-
 const navItems = [
   {
     name: "Dashboard",
@@ -46,48 +44,48 @@ const navItems = [
   },
 ]
 
-function Sidebar() {
-
-  const [open, setOpen] =
-    useState(false)
+function Sidebar({
+  sidebarOpen,
+  setSidebarOpen,
+}) {
 
   return (
     <>
-
+    
+      {/* Hamburger Button */}
       <button
         onClick={() =>
-          setOpen(true)
+          setSidebarOpen(true)
         }
         className="lg:hidden fixed top-5 left-5 z-50 p-3 rounded-2xl bg-violet-600 text-white shadow-lg"
       >
-
         <FiMenu size={22} />
-
       </button>
 
+      {/* Overlay */}
       <div
         onClick={() =>
-          setOpen(false)
+          setSidebarOpen(false)
         }
         className={`fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-all duration-300 lg:hidden ${
-          open
+          sidebarOpen
             ? "opacity-100 visible"
             : "opacity-0 invisible"
         }`}
       />
 
+      {/* Sidebar */}
       <aside
         className={`fixed lg:static top-0 left-0 z-50 w-72 min-h-screen p-6 border-r transition-all duration-300
-
+        
         bg-white dark:bg-slate-900
         border-black/10 dark:border-white/10
-
+        
         ${
-          open
+          sidebarOpen
             ? "translate-x-0"
             : "-translate-x-full lg:translate-x-0"
-        }
-      `}
+        }`}
       >
 
         <div className="flex items-center justify-between mb-10">
@@ -96,15 +94,14 @@ function Sidebar() {
             FinTrack
           </h1>
 
+          {/* Close Button */}
           <button
             onClick={() =>
-              setOpen(false)
+              setSidebarOpen(false)
             }
             className="lg:hidden text-slate-700 dark:text-white"
           >
-
             <FiX size={24} />
-
           </button>
 
         </div>
@@ -117,18 +114,16 @@ function Sidebar() {
               key={item.name}
               to={item.path}
               onClick={() =>
-                setOpen(false)
+                setSidebarOpen(false)
               }
-
               className={({ isActive }) =>
                 `flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 font-medium
-
+                
                 ${
                   isActive
                     ? "bg-violet-600 text-white shadow-lg shadow-violet-500/20"
                     : "text-slate-700 dark:text-white hover:bg-black/5 dark:hover:bg-white/5"
-                }
-              `
+                }`
               }
             >
 
@@ -145,7 +140,6 @@ function Sidebar() {
         </nav>
 
       </aside>
-
     </>
   )
 }

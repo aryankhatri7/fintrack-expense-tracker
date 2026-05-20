@@ -59,19 +59,7 @@ function Transactions() {
 
     <div className="space-y-6 md:space-y-8">
 
-      {/* Header */}
-      <div>
-
-        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">
-          Transactions
-        </h1>
-
-        <p className="text-sm md:text-base text-slate-500 dark:text-white/50 mt-2">
-          Manage and track your financial activity
-        </p>
-
-      </div>
-
+     
       {/* Main Card */}
       <div className="bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-4 md:p-6 transition-all duration-300">
 

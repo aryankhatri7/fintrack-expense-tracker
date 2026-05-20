@@ -16,18 +16,7 @@ function Analytics() {
 
     <div className="space-y-6 md:space-y-8">
 
-      {/* Page Header */}
-      <div>
-
-        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">
-          Analytics
-        </h1>
-
-        <p className="text-sm md:text-base text-slate-500 dark:text-white/50 mt-2">
-          Financial insights and spending overview
-        </p>
-
-      </div>
+     
 
       {/* Stats */}
       <AnalyticsStats />

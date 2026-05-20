@@ -66,18 +66,7 @@ function Budget() {
 
     <div className="space-y-6 md:space-y-8">
 
-      {/* Header */}
-      <div>
-
-        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">
-          Budget
-        </h1>
-
-        <p className="text-sm md:text-base text-slate-500 dark:text-white/50 mt-2">
-          Track your monthly budget and expenses
-        </p>
-
-      </div>
+  
 
       {/* Main Card */}
       <div className="bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-5 md:p-8 transition-all duration-300">

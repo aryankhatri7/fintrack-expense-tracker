@@ -40,44 +40,47 @@ const stats = [
 ]
 
 function AnalyticsStats() {
-return (
-  <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
 
-    {stats.map((item) => (
+  return (
 
-      <div
-        key={item.title}
-        className="bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl p-6 hover:scale-[1.02] transition-all duration-300 shadow-sm dark:shadow-none"
-      >
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
 
-        <div className="flex items-center justify-between">
+      {stats.map((item) => (
 
-          <div>
+        <div
+          key={item.title}
+          className="bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl p-5 md:p-6 hover:scale-[1.02] transition-all duration-300 shadow-sm dark:shadow-none"
+        >
 
-            <p className="text-slate-500 dark:text-white/50 text-sm">
-              {item.title}
-            </p>
+          <div className="flex items-center justify-between gap-4">
 
-            <h2 className="text-slate-900 dark:text-white text-3xl font-bold mt-3">
-              {item.value}
-            </h2>
+            <div className="min-w-0">
 
-          </div>
+              <p className="text-slate-500 dark:text-white/50 text-sm">
+                {item.title}
+              </p>
 
-          <div
-            className={`p-4 rounded-2xl text-2xl ${item.color}`}
-          >
-            {item.icon}
+              <h2 className="text-slate-900 dark:text-white text-2xl md:text-3xl font-bold mt-2 break-words">
+                {item.value}
+              </h2>
+
+            </div>
+
+            <div
+              className={`p-3 md:p-4 rounded-2xl text-xl md:text-2xl shrink-0 ${item.color}`}
+            >
+              {item.icon}
+            </div>
+
           </div>
 
         </div>
 
-      </div>
+      ))}
 
-    ))}
+    </div>
 
-  </div>
-)
+  )
 }
 
 export default AnalyticsStats

@@ -4,7 +4,6 @@ import {
   FiCreditCard,
   FiDollarSign,
   FiSettings,
-  FiMenu,
   FiX,
 } from "react-icons/fi"
 
@@ -50,9 +49,8 @@ function Sidebar({
 }) {
 
   return (
+
     <>
-    
-  
 
       {/* Overlay */}
       <div
@@ -68,7 +66,7 @@ function Sidebar({
 
       {/* Sidebar */}
       <aside
-        className={`fixed lg:static top-0 left-0 z-50 w-72 min-h-screen p-6 border-r transition-all duration-300
+        className={`fixed lg:static top-0 left-0 z-50 w-[280px] sm:w-72 min-h-screen p-5 md:p-6 border-r transition-all duration-300
         
         bg-white dark:bg-slate-900
         border-black/10 dark:border-white/10
@@ -80,9 +78,10 @@ function Sidebar({
         }`}
       >
 
-        <div className="flex items-center justify-between mb-10">
+        {/* Logo */}
+        <div className="flex items-center justify-between mb-8 md:mb-10">
 
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+          <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">
             FinTrack
           </h1>
 
@@ -91,14 +90,17 @@ function Sidebar({
             onClick={() =>
               setSidebarOpen(false)
             }
-            className="lg:hidden text-slate-700 dark:text-white"
+            className="lg:hidden p-2 rounded-xl text-slate-700 dark:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-all"
           >
+
             <FiX size={24} />
+
           </button>
 
         </div>
 
-        <nav className="space-y-3">
+        {/* Navigation */}
+        <nav className="space-y-2 md:space-y-3">
 
           {navItems.map((item) => (
 
@@ -108,8 +110,9 @@ function Sidebar({
               onClick={() =>
                 setSidebarOpen(false)
               }
+
               className={({ isActive }) =>
-                `flex items-center gap-4 p-4 rounded-2xl transition-all duration-300 font-medium
+                `flex items-center gap-4 p-3 md:p-4 rounded-2xl transition-all duration-300 font-medium text-sm md:text-base
                 
                 ${
                   isActive
@@ -119,11 +122,13 @@ function Sidebar({
               }
             >
 
-              <span className="text-xl">
+              <span className="text-lg md:text-xl shrink-0">
                 {item.icon}
               </span>
 
-              {item.name}
+              <span className="truncate">
+                {item.name}
+              </span>
 
             </NavLink>
 
@@ -132,7 +137,9 @@ function Sidebar({
         </nav>
 
       </aside>
+
     </>
+
   )
 }
 

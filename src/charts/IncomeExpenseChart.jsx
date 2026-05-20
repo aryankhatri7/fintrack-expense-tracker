@@ -46,71 +46,88 @@ const data = [
 ]
 
 function IncomeExpenseChart() {
+
   return (
-  <div className="bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl p-6 transition-all duration-300">
 
-    <div className="mb-6">
+    <div className="bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl p-5 md:p-6 transition-all duration-300">
 
-      <h2 className="text-slate-900 dark:text-white text-2xl font-bold">
-        Income vs Expenses
-      </h2>
+      {/* Header */}
+      <div className="mb-6">
 
-      <p className="text-slate-600 dark:text-white/50 mt-1">
-        Financial flow comparison
-      </p>
+        <h2 className="text-slate-900 dark:text-white text-xl md:text-2xl font-bold">
+          Income vs Expenses
+        </h2>
 
-    </div>
+        <p className="text-slate-600 dark:text-white/50 mt-1 text-sm md:text-base">
+          Financial flow comparison
+        </p>
 
-    <div className="h-[350px]">
+      </div>
 
-      <ResponsiveContainer width="100%" height="100%">
+      {/* Chart */}
+      <div className="h-[280px] md:h-[350px]">
 
-        <AreaChart data={data}>
+        <ResponsiveContainer
+          width="100%"
+          height="100%"
+        >
 
-          <XAxis
-            dataKey="month"
-            stroke="#94a3b8"
-          />
-
-          <YAxis
-            stroke="#94a3b8"
-          />
-
-          <Tooltip
-            contentStyle={{
-              background: "#0f172a",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: "16px",
-              color: "#fff",
+          <AreaChart
+            data={data}
+            margin={{
+              top: 10,
+              right: 10,
+              left: -20,
+              bottom: 0,
             }}
-          />
+          >
 
-          <Area
-            type="monotone"
-            dataKey="income"
-            stackId="1"
-            stroke="#22c55e"
-            fill="#22c55e"
-            fillOpacity={0.3}
-          />
+            <XAxis
+              dataKey="month"
+              stroke="#94a3b8"
+              tick={{ fontSize: 12 }}
+            />
 
-          <Area
-            type="monotone"
-            dataKey="expense"
-            stackId="2"
-            stroke="#ef4444"
-            fill="#ef4444"
-            fillOpacity={0.3}
-          />
+            <YAxis
+              stroke="#94a3b8"
+              tick={{ fontSize: 12 }}
+            />
 
-        </AreaChart>
+            <Tooltip
+              contentStyle={{
+                background: "#0f172a",
+                border:
+                  "1px solid rgba(255,255,255,0.1)",
+                borderRadius: "16px",
+                color: "#fff",
+              }}
+            />
 
-      </ResponsiveContainer>
+            <Area
+              type="monotone"
+              dataKey="income"
+              stroke="#22c55e"
+              fill="#22c55e"
+              fillOpacity={0.3}
+            />
+
+            <Area
+              type="monotone"
+              dataKey="expense"
+              stroke="#ef4444"
+              fill="#ef4444"
+              fillOpacity={0.3}
+            />
+
+          </AreaChart>
+
+        </ResponsiveContainer>
+
+      </div>
 
     </div>
 
-  </div>
-)
+  )
 }
 
 export default IncomeExpenseChart

@@ -8,7 +8,8 @@ import {
   ResponsiveContainer,
 } from "recharts"
 
-import { TransactionContext } from "../context/TransactionContext"
+import { TransactionContext }
+  from "../context/TransactionContext"
 
 const COLORS = [
   "#8B5CF6",
@@ -51,71 +52,78 @@ function ExpenseChart() {
   )
 
   return (
-  <div className="bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl p-6 transition-all duration-300">
 
-    <div className="flex items-center justify-between mb-6">
+    <div className="bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl p-5 md:p-6 transition-all duration-300">
 
-      <div>
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
 
-        <h2 className="text-slate-900 dark:text-white text-2xl font-bold">
-          Expense Analytics
-        </h2>
+        <div>
 
-        <p className="text-slate-600 dark:text-white/50 mt-1">
-          Category spending overview
-        </p>
+          <h2 className="text-slate-900 dark:text-white text-xl md:text-2xl font-bold">
+            Expense Analytics
+          </h2>
+
+          <p className="text-slate-600 dark:text-white/50 mt-1 text-sm md:text-base">
+            Category spending overview
+          </p>
+
+        </div>
+
+      </div>
+
+      {/* Chart */}
+      <div className="h-[280px] md:h-[350px]">
+
+        {data.length === 0 ? (
+
+          <div className="h-full flex items-center justify-center text-slate-500 dark:text-white/50 text-sm md:text-base">
+            No expense data available
+          </div>
+
+        ) : (
+
+          <ResponsiveContainer
+            width="100%"
+            height="100%"
+          >
+
+            <PieChart>
+
+              <Pie
+                data={data}
+                dataKey="value"
+                outerRadius={100}
+                innerRadius={60}
+                paddingAngle={4}
+              >
+
+                {data.map((entry, index) => (
+
+                  <Cell
+                    key={index}
+                    fill={
+                      COLORS[index % COLORS.length]
+                    }
+                  />
+
+                ))}
+
+              </Pie>
+
+              <Tooltip />
+
+            </PieChart>
+
+          </ResponsiveContainer>
+
+        )}
 
       </div>
 
     </div>
 
-    <div className="h-[350px]">
-
-      {data.length === 0 ? (
-
-        <div className="h-full flex items-center justify-center text-slate-500 dark:text-white/50">
-          No expense data available
-        </div>
-
-      ) : (
-
-        <ResponsiveContainer width="100%" height="100%">
-
-          <PieChart>
-
-            <Pie
-              data={data}
-              dataKey="value"
-              outerRadius={120}
-              innerRadius={70}
-              paddingAngle={5}
-            >
-
-              {data.map((entry, index) => (
-
-                <Cell
-                  key={index}
-                  fill={
-                    COLORS[index % COLORS.length]
-                  }
-                />
-
-              ))}
-
-            </Pie>
-
-            <Tooltip />
-
-          </PieChart>
-
-        </ResponsiveContainer>
-
-      )}
-
-    </div>
-
-  </div>
-)
+  )
 }
 
 export default ExpenseChart

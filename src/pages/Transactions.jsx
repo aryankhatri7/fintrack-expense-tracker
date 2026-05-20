@@ -57,24 +57,28 @@ function Transactions() {
 
   return (
 
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8">
 
+      {/* Header */}
       <div>
 
-        <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
+        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">
           Transactions
         </h1>
 
-        <p className="text-slate-500 dark:text-white/50 mt-2">
+        <p className="text-sm md:text-base text-slate-500 dark:text-white/50 mt-2">
           Manage and track your financial activity
         </p>
 
       </div>
 
-      <div className="bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-6 transition-all duration-300">
+      {/* Main Card */}
+      <div className="bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-4 md:p-6 transition-all duration-300">
 
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
+        {/* Filters */}
+        <div className="flex flex-col lg:flex-row gap-4 mb-6">
 
+          {/* Search */}
           <div className="relative flex-1">
 
             <FiSearch
@@ -91,18 +95,19 @@ function Transactions() {
                   e.target.value
                 )
               }
-              className="w-full bg-slate-50 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl py-4 pl-12 pr-4 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-white/40 outline-none"
+              className="w-full bg-slate-50 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl py-3 md:py-4 pl-12 pr-4 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-white/40 outline-none"
             />
 
           </div>
 
-          <div className="flex gap-3">
+          {/* Filter Buttons */}
+          <div className="grid grid-cols-3 gap-3">
 
             <button
               onClick={() =>
                 setFilterType("all")
               }
-              className={`px-5 py-3 rounded-2xl transition-all ${
+              className={`px-4 py-3 rounded-2xl text-sm md:text-base transition-all ${
                 filterType === "all"
                   ? "bg-violet-600 text-white"
                   : "bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-white/60"
@@ -115,7 +120,7 @@ function Transactions() {
               onClick={() =>
                 setFilterType("income")
               }
-              className={`px-5 py-3 rounded-2xl transition-all ${
+              className={`px-4 py-3 rounded-2xl text-sm md:text-base transition-all ${
                 filterType === "income"
                   ? "bg-green-600 text-white"
                   : "bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-white/60"
@@ -128,7 +133,7 @@ function Transactions() {
               onClick={() =>
                 setFilterType("expense")
               }
-              className={`px-5 py-3 rounded-2xl transition-all ${
+              className={`px-4 py-3 rounded-2xl text-sm md:text-base transition-all ${
                 filterType === "expense"
                   ? "bg-red-600 text-white"
                   : "bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-white/60"
@@ -141,6 +146,7 @@ function Transactions() {
 
         </div>
 
+        {/* Transactions */}
         <div className="space-y-4">
 
           {filteredTransactions.length === 0 ? (
@@ -155,16 +161,17 @@ function Transactions() {
 
               <div
                 key={item.id}
-                className="flex items-center justify-between bg-slate-50 dark:bg-white/5 border border-black/10 dark:border-white/10 p-5 rounded-2xl hover:bg-slate-100 dark:hover:bg-white/10 transition-all duration-300"
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-slate-50 dark:bg-white/5 border border-black/10 dark:border-white/10 p-4 md:p-5 rounded-2xl hover:bg-slate-100 dark:hover:bg-white/10 transition-all duration-300"
               >
 
-                <div>
+                {/* Left */}
+                <div className="min-w-0">
 
-                  <h3 className="text-slate-900 dark:text-white font-semibold text-lg">
+                  <h3 className="text-slate-900 dark:text-white font-semibold text-base md:text-lg break-words">
                     {item.title}
                   </h3>
 
-                  <div className="flex items-center gap-3 mt-2">
+                  <div className="flex items-center flex-wrap gap-2 mt-2">
 
                     <span className="text-slate-500 dark:text-white/50 text-sm">
                       {item.category}
@@ -184,43 +191,50 @@ function Transactions() {
 
                 </div>
 
-                <div className="flex items-center gap-5">
+                {/* Right */}
+                <div className="flex items-center justify-between sm:justify-end gap-4 md:gap-5">
 
                   <div
-                    className={`font-bold text-xl ${
+                    className={`font-bold text-lg md:text-xl whitespace-nowrap ${
                       item.type === "income"
                         ? "text-green-400"
                         : "text-red-400"
                     }`}
                   >
+
                     {item.type === "income"
                       ? "+"
                       : "-"}
 
                     ${item.amount}
+
                   </div>
 
-                  <button
-                    onClick={() => {
+                  <div className="flex items-center gap-3">
 
-                      setSelectedTransaction(item)
+                    <button
+                      onClick={() => {
 
-                      setOpenModal(true)
+                        setSelectedTransaction(item)
 
-                    }}
-                    className="text-slate-400 dark:text-white/40 hover:text-violet-400 transition-all"
-                  >
-                    <FiEdit size={20} />
-                  </button>
+                        setOpenModal(true)
 
-                  <button
-                    onClick={() =>
-                      deleteTransaction(item.id)
-                    }
-                    className="text-slate-400 dark:text-white/40 hover:text-red-400 transition-all"
-                  >
-                    <FiTrash2 size={20} />
-                  </button>
+                      }}
+                      className="text-slate-400 dark:text-white/40 hover:text-violet-400 transition-all"
+                    >
+                      <FiEdit size={20} />
+                    </button>
+
+                    <button
+                      onClick={() =>
+                        deleteTransaction(item.id)
+                      }
+                      className="text-slate-400 dark:text-white/40 hover:text-red-400 transition-all"
+                    >
+                      <FiTrash2 size={20} />
+                    </button>
+
+                  </div>
 
                 </div>
 

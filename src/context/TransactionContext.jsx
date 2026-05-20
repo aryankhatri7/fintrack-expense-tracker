@@ -25,6 +25,7 @@ function TransactionProvider({
 
     })
 
+  // Add Transaction
   const addTransaction = (
     transaction
   ) => {
@@ -40,10 +41,13 @@ function TransactionProvider({
 
   }
 
+  // Delete Transaction
   const deleteTransaction = (id) => {
 
     setTransactions((prev) =>
-      prev.filter((item) => item.id !== id)
+      prev.filter(
+        (item) => item.id !== id
+      )
     )
 
     toast.error(
@@ -51,22 +55,27 @@ function TransactionProvider({
     )
 
   }
-  const editTransaction = (updatedTransaction) => {
 
-  setTransactions((prev) =>
-    prev.map((item) =>
-      item.id === updatedTransaction.id
-        ? updatedTransaction
-        : item
+  // Edit Transaction
+  const editTransaction = (
+    updatedTransaction
+  ) => {
+
+    setTransactions((prev) =>
+      prev.map((item) =>
+        item.id === updatedTransaction.id
+          ? updatedTransaction
+          : item
+      )
     )
-  )
 
-  toast.info(
-    "Transaction updated"
-  )
+    toast.info(
+      "Transaction updated"
+    )
 
-}
+  }
 
+  // Save to LocalStorage
   useEffect(() => {
 
     localStorage.setItem(
@@ -77,18 +86,20 @@ function TransactionProvider({
   }, [transactions])
 
   return (
+
     <TransactionContext.Provider
-     value={{
-  transactions,
-  addTransaction,
-  deleteTransaction,
-  editTransaction,
-}}
+      value={{
+        transactions,
+        addTransaction,
+        deleteTransaction,
+        editTransaction,
+      }}
     >
 
       {children}
 
     </TransactionContext.Provider>
+
   )
 }
 

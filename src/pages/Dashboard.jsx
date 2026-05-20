@@ -21,13 +21,14 @@ function Dashboard() {
 
     <div className="space-y-8">
 
-      <div className="bg-gradient-to-r from-violet-600 to-indigo-600 rounded-3xl p-8 shadow-2xl">
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-violet-600 to-indigo-600 rounded-3xl p-5 md:p-8 shadow-2xl">
 
-        <h1 className="text-white text-4xl font-bold">
+        <h1 className="text-white text-3xl md:text-4xl font-bold leading-tight">
           Welcome Back 👋
         </h1>
 
-        <p className="text-white/70 mt-3 text-lg">
+        <p className="text-white/70 mt-3 text-sm md:text-lg">
           Here's your financial overview today.
         </p>
 
@@ -35,7 +36,7 @@ function Dashboard() {
           onClick={() =>
             setOpenModal(true)
           }
-          className="mt-6 bg-white text-black px-6 py-3 rounded-2xl font-semibold hover:scale-105 transition-all duration-300 shadow-lg"
+          className="mt-6 bg-white text-black px-5 md:px-6 py-3 rounded-2xl font-semibold hover:scale-105 transition-all duration-300 shadow-lg"
         >
 
           + Add Transaction
@@ -44,8 +45,10 @@ function Dashboard() {
 
       </div>
 
+      {/* Stats Cards */}
       <StatsCards />
 
+      {/* Charts + Transactions */}
       <div className="grid lg:grid-cols-2 gap-6">
 
         <ExpenseChart />
@@ -54,6 +57,7 @@ function Dashboard() {
 
       </div>
 
+      {/* Modal */}
       <AddTransactionModal
         isOpen={openModal}
         onClose={() =>

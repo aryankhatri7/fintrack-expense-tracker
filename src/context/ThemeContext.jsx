@@ -21,6 +21,7 @@ function ThemeProvider({
 
     })
 
+  // Apply Theme
   useEffect(() => {
 
     localStorage.setItem(
@@ -44,6 +45,7 @@ function ThemeProvider({
 
   }, [theme])
 
+  // Toggle Theme
   const toggleTheme = () => {
 
     setTheme((prev) =>
@@ -55,6 +57,7 @@ function ThemeProvider({
   }
 
   return (
+
     <ThemeContext.Provider
       value={{
         theme,
@@ -65,6 +68,7 @@ function ThemeProvider({
       {children}
 
     </ThemeContext.Provider>
+
   )
 }
 

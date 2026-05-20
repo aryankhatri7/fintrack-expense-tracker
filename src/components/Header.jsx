@@ -3,11 +3,45 @@ import {
   FiSearch,
   FiMenu,
 } from "react-icons/fi"
-
+import { useLocation } from "react-router-dom"
 function Header({
   setSidebarOpen,
 }) {
+const location = useLocation()
+const pageData = {
 
+  "/": {
+    title: "Dashboard",
+    subtitle: "Track your finances easily",
+  },
+
+  "/analytics": {
+    title: "Analytics",
+    subtitle:
+      "Financial insights and spending overview",
+  },
+
+  "/transactions": {
+    title: "Transactions",
+    subtitle:
+      "Manage and track your financial activity",
+  },
+
+  "/budget": {
+    title: "Budget",
+    subtitle:
+      "Track your monthly budget and expenses",
+  },
+
+  "/settings": {
+    title: "Settings",
+    subtitle:
+      "Manage your preferences and app settings",
+  },
+
+}
+const currentPage =
+  pageData[location.pathname]
   return (
 
     <header className="flex items-center justify-between gap-3 md:gap-4 mb-8">
@@ -28,13 +62,19 @@ function Header({
 
         <div className="min-w-0">
 
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 dark:text-white transition-all duration-300 truncate">
-            Dashboard
-          </h2>
+         {currentPage && (
+  <>
+  
+    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 dark:text-white transition-all duration-300 truncate">
+      {currentPage.title}
+    </h2>
 
-          <p className="text-xs sm:text-sm md:text-base text-slate-500 dark:text-white/50 mt-1 transition-all duration-300 truncate">
-            Track your finances easily
-          </p>
+    <p className="text-xs sm:text-sm md:text-base text-slate-500 dark:text-white/50 mt-1 transition-all duration-300 truncate">
+      {currentPage.subtitle}
+    </p>
+
+  </>
+)}
 
         </div>
 

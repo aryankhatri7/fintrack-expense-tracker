@@ -3,7 +3,9 @@ import bcrypt from "bcryptjs";
 import validator from "validator";
 import generateToken from "../utils/generateToken.js";
 
+// ==========================
 // Register User
+// ==========================
 export const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -53,6 +55,7 @@ export const registerUser = async (req, res) => {
       password: hashedPassword,
     });
 
+    // Generate Token
     const token = generateToken(user._id);
 
     res.status(201).json({
@@ -74,7 +77,9 @@ export const registerUser = async (req, res) => {
   }
 };
 
+// ==========================
 // Login User
+// ==========================
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -127,4 +132,14 @@ export const loginUser = async (req, res) => {
       message: error.message,
     });
   }
+};
+
+// ==========================
+// Get Current User
+// ==========================
+export const getMe = async (req, res) => {
+  res.status(200).json({
+    success: true,
+    user: req.user,
+  });
 };

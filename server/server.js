@@ -4,6 +4,7 @@ import cors from "cors";
 import dns from "node:dns";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
+import transactionRoutes from "./routes/transactionRoutes.js";
 
 // Load environment variables
 dotenv.config();
@@ -22,7 +23,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
-
+app.use("/api/transactions", transactionRoutes);
 // Test Route
 app.get("/", (req, res) => {
   res.send("FinTrack Backend Running 🚀");

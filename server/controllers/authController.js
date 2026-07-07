@@ -53,11 +53,66 @@ export const registerUser = async (req, res) => {
       password: hashedPassword,
     });
 
- const token = generateToken(user._id);
+    const token = generateToken(user._id);
 
     res.status(201).json({
       success: true,
       message: "Registration Successful",
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// Login User
+export const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Check Empty Fields
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Email and password are required",
+      });
+    }
+
+    // Find User
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email or password",
+      });
+    }
+
+    // Compare Password
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email or password",
+      });
+    }
+
+    // Generate Token
+    const token = generateToken(user._id);
+
+    res.status(200).json({
+      success: true,
+      message: "Login Successful",
       token,
       user: {
         id: user._id,

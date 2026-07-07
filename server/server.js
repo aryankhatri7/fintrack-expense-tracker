@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import dns from "node:dns";
 import connectDB from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
 
 // Load environment variables
 dotenv.config();
@@ -18,6 +19,9 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Routes
+app.use("/api/auth", authRoutes);
 
 // Test Route
 app.get("/", (req, res) => {

@@ -1,6 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
-
+import AuthProvider from "./context/AuthContext";
 import App from "./App"
 import "./index.css"
 import ThemeProvider from "./context/ThemeContext"
@@ -17,19 +17,23 @@ ReactDOM.createRoot(
 
     <ThemeProvider>
 
-      <TransactionProvider>
+  <AuthProvider>
 
-        <App />
+    <TransactionProvider>
 
-        <ToastContainer
-          position="top-right"
-          autoClose={2500}
-          theme="dark"
-        />
+      <App />
 
-      </TransactionProvider>
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        theme="dark"
+      />
 
-    </ThemeProvider>
+    </TransactionProvider>
+
+  </AuthProvider>
+
+</ThemeProvider>
 
   </React.StrictMode>
 

@@ -1,6 +1,35 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
 import AuthLayout from "../components/auth/AuthLayout";
+import { useAuth } from "../context/AuthContext";
 
 function Register() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { register } = useAuth();
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      await register(name, email, password);
+
+      toast.success("Account created successfully!");
+
+      navigate("/");
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "Registration failed"
+      );
+    }
+  };
+
   return (
     <AuthLayout
       title="Create Account"
@@ -9,7 +38,7 @@ function Register() {
       footerLinkText="Sign In"
       footerLinkTo="/login"
     >
-      <form className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-5">
 
         {/* Name */}
         <div>
@@ -20,6 +49,8 @@ function Register() {
           <input
             type="text"
             placeholder="Enter your full name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             className="w-full px-4 py-3 rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-violet-500 transition-all"
           />
         </div>
@@ -33,6 +64,8 @@ function Register() {
           <input
             type="email"
             placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-3 rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-violet-500 transition-all"
           />
         </div>
@@ -46,6 +79,8 @@ function Register() {
           <input
             type="password"
             placeholder="Create a password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             className="w-full px-4 py-3 rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-violet-500 transition-all"
           />
         </div>

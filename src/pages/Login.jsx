@@ -1,6 +1,32 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
 import AuthLayout from "../components/auth/AuthLayout";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
+  const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+
+const { login } = useAuth();
+
+const navigate = useNavigate();
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    await login(email, password);
+
+    toast.success("Login successful!");
+
+    navigate("/");
+  } catch (error) {
+    toast.error(
+      error.response?.data?.message || "Login failed"
+    );
+  }
+};
   return (
     <AuthLayout
       title="Welcome Back"
@@ -9,7 +35,10 @@ function Login() {
       footerLinkText="Create one"
       footerLinkTo="/register"
     >
-      <form className="space-y-5">
+     <form
+  onSubmit={handleSubmit}
+  className="space-y-5"
+>
 
         {/* Email */}
         <div>
@@ -18,10 +47,12 @@ function Login() {
           </label>
 
           <input
-            type="email"
-            placeholder="Enter your email"
-            className="w-full px-4 py-3 rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-violet-500 transition-all"
-          />
+  type="email"
+  placeholder="Enter your email"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  className="w-full px-4 py-3 rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-violet-500 transition-all"
+/>
         </div>
 
         {/* Password */}
@@ -31,10 +62,12 @@ function Login() {
           </label>
 
           <input
-            type="password"
-            placeholder="Enter your password"
-            className="w-full px-4 py-3 rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-violet-500 transition-all"
-          />
+  type="password"
+  placeholder="Enter your password"
+  value={password}
+  onChange={(e) => setPassword(e.target.value)}
+  className="w-full px-4 py-3 rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-violet-500 transition-all"
+/>
         </div>
 
         {/* Login Button */}

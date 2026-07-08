@@ -8,7 +8,7 @@ import {
 import AppLayout from "./layout/AppLayout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 function App() {
   return (
     <BrowserRouter>
@@ -25,11 +25,15 @@ function App() {
           element={<Register />}
         />
 
-        {/* Main Application */}
-        <Route
-          path="/*"
-          element={<AppLayout />}
-        />
+        {/* Protected Application */}
+<Route
+  path="/*"
+  element={
+    <ProtectedRoute>
+      <AppLayout />
+    </ProtectedRoute>
+  }
+/>
 
         {/* Fallback */}
         <Route

@@ -57,6 +57,15 @@ function AuthProvider({ children }) {
     return currentUser;
   };
 
+  // Logout
+  const logout = () => {
+    localStorage.removeItem("token");
+
+    setToken(null);
+
+    setUser(null);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -66,6 +75,7 @@ function AuthProvider({ children }) {
         setToken,
         login,
         register,
+        logout,
       }}
     >
       {children}

@@ -2,80 +2,75 @@ import {
   FiBell,
   FiSearch,
   FiMenu,
-} from "react-icons/fi"
-import { useLocation } from "react-router-dom"
-function Header({
-  setSidebarOpen,
-}) {
-const location = useLocation()
-const pageData = {
+} from "react-icons/fi";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
-  "/": {
-    title: "Dashboard",
-    subtitle: "Track your finances easily",
-  },
+function Header({ setSidebarOpen }) {
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  "/analytics": {
-    title: "Analytics",
-    subtitle:
-      "Financial insights and spending overview",
-  },
+  const { logout } = useAuth();
 
-  "/transactions": {
-    title: "Transactions",
-    subtitle:
-      "Manage and track your financial activity",
-  },
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
-  "/budget": {
-    title: "Budget",
-    subtitle:
-      "Track your monthly budget and expenses",
-  },
+  const pageData = {
+    "/": {
+      title: "Dashboard",
+      subtitle: "Track your finances easily",
+    },
 
-  "/settings": {
-    title: "Settings",
-    subtitle:
-      "Manage your preferences and app settings",
-  },
+    "/analytics": {
+      title: "Analytics",
+      subtitle: "Financial insights and spending overview",
+    },
 
-}
-const currentPage =
-  pageData[location.pathname]
+    "/transactions": {
+      title: "Transactions",
+      subtitle: "Manage and track your financial activity",
+    },
+
+    "/budget": {
+      title: "Budget",
+      subtitle: "Track your monthly budget and expenses",
+    },
+
+    "/settings": {
+      title: "Settings",
+      subtitle: "Manage your preferences and app settings",
+    },
+  };
+
+  const currentPage = pageData[location.pathname];
+
   return (
-
     <header className="flex items-center justify-between gap-3 md:gap-4 mb-8">
 
       {/* Left Side */}
       <div className="flex items-center gap-3 md:gap-4 min-w-0">
 
         <button
-          onClick={() =>
-            setSidebarOpen(true)
-          }
+          onClick={() => setSidebarOpen(true)}
           className="lg:hidden p-3 rounded-2xl bg-violet-600 text-white shadow-lg shrink-0"
         >
-
           <FiMenu size={22} />
-
         </button>
 
         <div className="min-w-0">
+          {currentPage && (
+            <>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 dark:text-white transition-all duration-300 truncate">
+                {currentPage.title}
+              </h2>
 
-         {currentPage && (
-  <>
-  
-    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 dark:text-white transition-all duration-300 truncate">
-      {currentPage.title}
-    </h2>
-
-    <p className="text-xs sm:text-sm md:text-base text-slate-500 dark:text-white/50 mt-1 transition-all duration-300 truncate">
-      {currentPage.subtitle}
-    </p>
-
-  </>
-)}
-
+              <p className="text-xs sm:text-sm md:text-base text-slate-500 dark:text-white/50 mt-1 transition-all duration-300 truncate">
+                {currentPage.subtitle}
+              </p>
+            </>
+          )}
         </div>
 
       </div>
@@ -98,23 +93,21 @@ const currentPage =
 
         {/* Notification */}
         <button className="p-2.5 md:p-3 rounded-2xl border transition-all duration-300 hover:scale-105 bg-black/[0.03] dark:bg-white/5 border-black/10 dark:border-white/10 text-slate-700 dark:text-white">
-
           <FiBell size={18} />
-
         </button>
 
-        {/* Profile */}
-        <img
-          src="https://i.pravatar.cc/100"
-          alt="profile"
-          className="w-10 h-10 md:w-11 md:h-11 rounded-full border border-black/10 dark:border-white/10 object-cover"
-        />
+        {/* Temporary Logout Button */}
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 rounded-xl bg-red-500 hover:bg-red-600 text-white font-medium transition-all"
+        >
+          Logout
+        </button>
 
       </div>
 
     </header>
-
-  )
+  );
 }
 
-export default Header
+export default Header;

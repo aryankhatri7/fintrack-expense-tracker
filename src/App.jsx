@@ -1,79 +1,45 @@
-import { useState } from "react"
-
-import Sidebar from "./components/Sidebar"
-
 import {
   BrowserRouter,
   Routes,
   Route,
-} from "react-router-dom"
+  Navigate,
+} from "react-router-dom";
 
-import Header from "./components/Header"
-
-import Dashboard from "./pages/Dashboard"
-import Analytics from "./pages/Analytics"
-import Transactions from "./pages/Transactions"
-import Budget from "./pages/Budget"
-import Settings from "./pages/Settings"
+import AppLayout from "./layout/AppLayout";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
-
-  const [sidebarOpen, setSidebarOpen] =
-    useState(false)
-
   return (
-
     <BrowserRouter>
+      <Routes>
 
-      <div className="flex min-h-screen bg-white dark:bg-slate-950 transition-all duration-300 overflow-hidden">
-
-        <Sidebar
-          sidebarOpen={sidebarOpen}
-          setSidebarOpen={setSidebarOpen}
+        {/* Public Routes */}
+        <Route
+          path="/login"
+          element={<Login />}
         />
 
-        <div className="flex-1 p-4 md:p-6 lg:p-8 transition-all duration-300 overflow-x-hidden">
+        <Route
+          path="/register"
+          element={<Register />}
+        />
 
-          <Header
-            setSidebarOpen={setSidebarOpen}
-          />
+        {/* Main Application */}
+        <Route
+          path="/*"
+          element={<AppLayout />}
+        />
 
-          <Routes>
+        {/* Fallback */}
+        <Route
+          path="*"
+          element={<Navigate to="/" replace />}
+        />
 
-            <Route
-              path="/"
-              element={<Dashboard />}
-            />
-
-            <Route
-              path="/analytics"
-              element={<Analytics />}
-            />
-
-            <Route
-              path="/transactions"
-              element={<Transactions />}
-            />
-
-            <Route
-              path="/budget"
-              element={<Budget />}
-            />
-
-            <Route
-              path="/settings"
-              element={<Settings />}
-            />
-
-          </Routes>
-
-        </div>
-
-      </div>
-
+      </Routes>
     </BrowserRouter>
-
-  )
+  );
 }
 
-export default App
+export default App;

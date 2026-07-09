@@ -4,7 +4,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-
+import PublicRoute from "./components/auth/PublicRoute";
 import AppLayout from "./layout/AppLayout";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -16,14 +16,22 @@ function App() {
 
         {/* Public Routes */}
         <Route
-          path="/login"
-          element={<Login />}
-        />
+  path="/login"
+  element={
+    <PublicRoute>
+      <Login />
+    </PublicRoute>
+  }
+/>
 
-        <Route
-          path="/register"
-          element={<Register />}
-        />
+       <Route
+  path="/register"
+  element={
+    <PublicRoute>
+      <Register />
+    </PublicRoute>
+  }
+/>
 
         {/* Protected Application */}
 <Route

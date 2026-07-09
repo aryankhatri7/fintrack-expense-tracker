@@ -56,7 +56,23 @@ function AuthProvider({ children }) {
 
     return currentUser;
   };
+// Restore user on page refresh
+useEffect(() => {
+  const restoreUser = async () => {
+    if (!token) return;
 
+    try {
+      const currentUser = await getCurrentUser(token);
+      setUser(currentUser);
+    } catch (error) {
+      localStorage.removeItem("token");
+      setToken(null);
+      setUser(null);
+    }
+  };
+
+  restoreUser();
+}, [token]);
   // Logout
   const logout = () => {
     localStorage.removeItem("token");

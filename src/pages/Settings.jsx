@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useContext, useState } from "react"
 
 import {
   FiMoon,
@@ -11,12 +11,20 @@ import {
 import { ThemeContext }
   from "../context/ThemeContext"
 
+  import { useAuth } from "../context/AuthContext"
+
+  import EditProfileModal from "../components/EditProfileModal"
+
 function Settings() {
 
   const {
     theme,
     toggleTheme,
   } = useContext(ThemeContext)
+
+  const { user } = useAuth()
+
+  const [openProfileModal, setOpenProfileModal] = useState(false)
 
   return (
 
@@ -58,8 +66,8 @@ function Settings() {
               </p>
 
               <h3 className="text-slate-900 dark:text-white font-semibold mt-1 break-words">
-                Aryan Khatri
-              </h3>
+  {user?.name || "Loading..."}
+</h3>
 
             </div>
 
@@ -70,11 +78,33 @@ function Settings() {
               </p>
 
               <h3 className="text-slate-900 dark:text-white font-semibold mt-1 break-words">
-                aryan@example.com
-              </h3>
+  {user?.email || "Loading..."}
+</h3>
 
             </div>
+<div className="bg-slate-50 dark:bg-white/5 rounded-2xl p-4 border border-black/10 dark:border-white/10">
 
+  <p className="text-sm text-slate-500 dark:text-white/50">
+    Member Since
+  </p>
+
+  <h3 className="text-slate-900 dark:text-white font-semibold mt-1 break-words">
+    {user?.createdAt
+      ? new Date(user.createdAt).toLocaleDateString("en-IN", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })
+      : "Loading..."}
+  </h3>
+
+</div>
+<button
+  onClick={() => setOpenProfileModal(true)}
+  className="w-full mt-6 bg-violet-600 hover:bg-violet-700 text-white font-semibold py-3 rounded-2xl transition-all duration-300"
+>
+  Edit Profile
+</button>
           </div>
 
         </div>
@@ -168,7 +198,10 @@ function Settings() {
         </div>
 
       </div>
-
+<EditProfileModal
+  isOpen={openProfileModal}
+  onClose={() => setOpenProfileModal(false)}
+/>
     </div>
 
   )

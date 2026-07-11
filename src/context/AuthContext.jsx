@@ -9,6 +9,7 @@ import {
   loginUser,
   registerUser,
   getCurrentUser,
+  updateProfile,
 } from "../services/authService";
 
 export const AuthContext = createContext();
@@ -56,6 +57,14 @@ function AuthProvider({ children }) {
 
     return currentUser;
   };
+  // Update Profile
+const updateUserProfile = async (name) => {
+  const data = await updateProfile(name, token);
+
+  setUser(data.user);
+
+  return data.user;
+};
 // Restore user on page refresh
 useEffect(() => {
   const restoreUser = async () => {
@@ -92,6 +101,7 @@ useEffect(() => {
         login,
         register,
         logout,
+        updateUserProfile,
       }}
     >
       {children}

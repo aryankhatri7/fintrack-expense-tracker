@@ -22,3 +22,17 @@ export const getCurrentUser = async (token) => {
 
   return response.data;
 };
+// Update Profile
+export const updateProfile = async (name, token) => {
+  const response = await api.put(
+    "/auth/profile",
+    { name },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
+};

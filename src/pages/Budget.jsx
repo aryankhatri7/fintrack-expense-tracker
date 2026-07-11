@@ -6,7 +6,8 @@ import {
 
 import { TransactionContext }
   from "../context/TransactionContext"
-
+import { formatCurrency }
+  from "../utils/formatCurrency"
 function Budget() {
 
   const { transactions } =
@@ -81,16 +82,25 @@ function Budget() {
               Monthly Budget
             </p>
 
-            <input
-              type="number"
-              value={totalBudget}
-              onChange={(e) =>
-                setTotalBudget(
-                  Number(e.target.value)
-                )
-              }
-              className="bg-transparent text-slate-900 dark:text-white text-3xl sm:text-4xl md:text-5xl font-bold mt-2 outline-none w-full"
-            />
+            <div className="flex items-center mt-2">
+
+  <span className="text-slate-900 dark:text-white text-3xl sm:text-4xl md:text-5xl font-bold mr-2">
+    ₹
+  </span>
+
+  <input
+    type="number"
+    value={totalBudget}
+    onChange={(e) =>
+      setTotalBudget(
+        Number(e.target.value)
+      )
+    }
+    min="0"
+    className="bg-transparent text-slate-900 dark:text-white text-3xl sm:text-4xl md:text-5xl font-bold outline-none w-full"
+  />
+
+</div>
 
           </div>
 
@@ -102,7 +112,7 @@ function Budget() {
             </p>
 
             <h2 className="text-green-400 text-3xl sm:text-4xl font-bold mt-2 break-words">
-              ${remaining.toLocaleString()}
+              {formatCurrency(remaining)}
             </h2>
 
           </div>
@@ -170,7 +180,7 @@ function Budget() {
             </p>
 
             <h3 className="text-slate-900 dark:text-white text-2xl md:text-3xl font-bold mt-2">
-              ${dailyAverage}
+              {formatCurrency(Number(dailyAverage))}
             </h3>
 
           </div>
@@ -194,7 +204,7 @@ function Budget() {
             </p>
 
             <h3 className="text-green-400 text-2xl md:text-3xl font-bold mt-2">
-              ${safeToSpend}
+              {formatCurrency(Number(safeToSpend))}
             </h3>
 
           </div>
@@ -211,7 +221,7 @@ function Budget() {
             </p>
 
             <h3 className="text-red-400 text-2xl md:text-3xl font-bold mt-2">
-              ${spent.toLocaleString()}
+              {formatCurrency(spent)}
             </h3>
 
           </div>
@@ -223,7 +233,7 @@ function Budget() {
             </p>
 
             <h3 className="text-green-400 text-2xl md:text-3xl font-bold mt-2">
-              ${remaining.toLocaleString()}
+              {formatCurrency(remaining)}
             </h3>
 
           </div>

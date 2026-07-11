@@ -11,6 +11,9 @@ import {
 import { TransactionContext }
   from "../context/TransactionContext"
 
+  import { formatCurrency }
+  from "../utils/formatCurrency"
+
 const COLORS = [
   "#8B5CF6",
   "#A78BFA",
@@ -51,6 +54,11 @@ function ExpenseChart() {
     })
   )
 
+  const totalExpense = expenseTransactions.reduce(
+    (sum, item) => sum + item.amount,
+    0
+  )
+
   return (
 
     <div className="bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl p-5 md:p-6 transition-all duration-300">
@@ -64,16 +72,24 @@ function ExpenseChart() {
             Expense Analytics
           </h2>
 
-          <p className="text-slate-600 dark:text-white/50 mt-1 text-sm md:text-base">
-            Category spending overview
-          </p>
+          <div className="mt-2">
+
+            <p className="text-slate-600 dark:text-white/50 text-sm">
+              Category spending overview
+            </p>
+
+            <h3 className="text-2xl font-bold text-slate-900 dark:text-white mt-2">
+              {formatCurrency(totalExpense)}
+            </h3>
+
+          </div>
 
         </div>
 
       </div>
 
       {/* Chart */}
-      <div className="h-[280px] md:h-[350px]">
+      <div>
 
         {data.length === 0 ? (
 
@@ -83,39 +99,94 @@ function ExpenseChart() {
 
         ) : (
 
-          <ResponsiveContainer
-            width="100%"
-            height="100%"
-          >
+          <>
 
-            <PieChart>
+            <div className="h-[280px] md:h-[350px]">
 
-              <Pie
-                data={data}
-                dataKey="value"
-                outerRadius={100}
-                innerRadius={60}
-                paddingAngle={4}
+              <ResponsiveContainer
+                width="100%"
+                height="100%"
               >
 
-                {data.map((entry, index) => (
+                <PieChart>
 
-                  <Cell
-                    key={index}
-                    fill={
-                      COLORS[index % COLORS.length]
-                    }
-                  />
+                  <Pie
+  data={data}
+  dataKey="value"
+  nameKey="name"
+  outerRadius={100}
+  innerRadius={60}
+  paddingAngle={4}
+>
 
-                ))}
+                    {data.map((entry, index) => (
 
-              </Pie>
+                      <Cell
+                        key={index}
+                        fill={
+                          COLORS[index % COLORS.length]
+                        }
+                      />
 
-              <Tooltip />
+                    ))}
 
-            </PieChart>
+                  </Pie>
 
-          </ResponsiveContainer>
+                 <Tooltip
+  formatter={(value) => [
+    formatCurrency(value),
+    "Amount",
+  ]}
+  contentStyle={{
+    background: "#0f172a",
+    border: "1px solid rgba(255,255,255,0.1)",
+    borderRadius: "16px",
+    color: "#fff",
+  }}
+/>
+
+                </PieChart>
+
+              </ResponsiveContainer>
+
+            </div>
+
+            <div className="mt-6 space-y-3">
+
+              {data.map((item, index) => (
+
+                <div
+                  key={item.name}
+                  className="flex items-center justify-between"
+                >
+
+                  <div className="flex items-center gap-3">
+
+                    <div
+                      className="w-4 h-4 rounded-full"
+                      style={{
+                        backgroundColor:
+                          COLORS[index % COLORS.length],
+                      }}
+                    />
+
+                    <span className="text-slate-700 dark:text-white/80">
+                      {item.name}
+                    </span>
+
+                  </div>
+
+                  <span className="font-semibold text-slate-900 dark:text-white">
+                    {formatCurrency(item.value)}
+                  </span>
+
+                </div>
+
+              ))}
+
+            </div>
+
+          </>
 
         )}
 
@@ -124,6 +195,7 @@ function ExpenseChart() {
     </div>
 
   )
+
 }
 
 export default ExpenseChart

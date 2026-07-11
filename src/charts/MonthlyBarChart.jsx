@@ -1,3 +1,5 @@
+import { useContext } from "react"
+
 import {
   BarChart,
   Bar,
@@ -7,40 +9,62 @@ import {
   ResponsiveContainer,
 } from "recharts"
 
-const data = [
-  {
-    month: "Jan",
-    expense: 400,
-  },
+import { TransactionContext }
+  from "../context/TransactionContext"
 
-  {
-    month: "Feb",
-    expense: 700,
-  },
-
-  {
-    month: "Mar",
-    expense: 500,
-  },
-
-  {
-    month: "Apr",
-    expense: 900,
-  },
-
-  {
-    month: "May",
-    expense: 650,
-  },
-
-  {
-    month: "Jun",
-    expense: 850,
-  },
-]
+  import { formatCurrency }
+  from "../utils/formatCurrency"
 
 function MonthlyBarChart() {
+const { transactions } =
+  useContext(TransactionContext)
 
+const currentYear =
+  new Date().getFullYear();
+
+const months = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+]
+
+const data = months.map((month, index) => {
+
+  const monthlyExpense =
+    transactions
+      .filter((item) => {
+
+        const date =
+          new Date(item.createdAt)
+
+        return (
+          item.type === "expense" &&
+          date.getMonth() === index &&
+          date.getFullYear() === currentYear
+        )
+
+      })
+      .reduce(
+        (sum, item) =>
+          sum + item.amount,
+        0
+      )
+
+  return {
+    month,
+    expense: monthlyExpense,
+  }
+
+})
   return (
 
     <div className="bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl p-5 md:p-6 transition-all duration-300">
@@ -88,14 +112,17 @@ function MonthlyBarChart() {
             />
 
             <Tooltip
-              contentStyle={{
-                background: "#0f172a",
-                border:
-                  "1px solid rgba(255,255,255,0.1)",
-                borderRadius: "16px",
-                color: "#fff",
-              }}
-            />
+  formatter={(value) => [
+    formatCurrency(value),
+    "Expenses",
+  ]}
+  contentStyle={{
+    background: "#0f172a",
+    border: "1px solid rgba(255,255,255,0.1)",
+    borderRadius: "16px",
+    color: "#fff",
+  }}
+/>
 
             <Bar
               dataKey="expense"

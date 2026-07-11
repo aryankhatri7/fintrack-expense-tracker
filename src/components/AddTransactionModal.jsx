@@ -149,14 +149,15 @@ function AddTransactionModal({
           />
 
           <input
-            type="number"
-            name="amount"
-            placeholder="Amount"
-            value={formData.amount}
-            onChange={handleChange}
-            className="w-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl px-4 py-3 md:py-4 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-white/30 outline-none focus:ring-2 focus:ring-violet-500 transition-all"
-          />
-
+  type="number"
+  name="amount"
+  placeholder="Enter amount in ₹"
+  value={formData.amount}
+  onChange={handleChange}
+  min="1"
+  step="0.01"
+  className="w-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl px-4 py-3 md:py-4 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-white/30 outline-none focus:ring-2 focus:ring-violet-500 transition-all"
+/>
           <select
             name="type"
             value={formData.type}
@@ -182,11 +183,17 @@ function AddTransactionModal({
           >
 
             <option>Food</option>
-            <option>Shopping</option>
-            <option>Bills</option>
-            <option>Travel</option>
-            <option>Salary</option>
-            <option>Freelance</option>
+<option>Transport</option>
+<option>Shopping</option>
+<option>Bills</option>
+<option>Rent</option>
+<option>Healthcare</option>
+<option>Entertainment</option>
+<option>Education</option>
+<option>Investment</option>
+<option>Salary</option>
+<option>Freelance</option>
+<option>Other</option>
 
           </select>
 

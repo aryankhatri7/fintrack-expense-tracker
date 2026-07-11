@@ -11,7 +11,8 @@ import AddTransactionModal
 
 import { TransactionContext }
   from "../context/TransactionContext"
-
+import { formatCurrency }
+  from "../utils/formatCurrency"
 function Transactions() {
 
   const {
@@ -194,7 +195,7 @@ function Transactions() {
                       ? "+"
                       : "-"}
 
-                    ${item.amount}
+                    {formatCurrency(item.amount)}
 
                   </div>
 

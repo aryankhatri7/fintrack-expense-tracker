@@ -11,6 +11,8 @@ import { TransactionContext }
 import AddTransactionModal
   from "./AddTransactionModal"
 
+  import { formatCurrency } from "../utils/formatCurrency"
+
 function RecentTransactions() {
 
   const {
@@ -63,7 +65,7 @@ function RecentTransactions() {
             transactions.map((item) => (
 
               <div
-                key={item.id}
+                key={item._id}
                 className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 p-4 rounded-2xl hover:bg-slate-50 dark:hover:bg-white/10 transition-all duration-300 shadow-sm dark:shadow-none"
               >
 
@@ -95,7 +97,7 @@ function RecentTransactions() {
                       ? "+"
                       : "-"}
 
-                    ${item.amount}
+                    {formatCurrency(item.amount)}
 
                   </div>
 
@@ -116,7 +118,7 @@ function RecentTransactions() {
 
                     <button
                       onClick={() =>
-                        deleteTransaction(item.id)
+                        deleteTransaction(item._id)
                       }
                       className="text-slate-400 dark:text-white/40 hover:text-red-500 transition-all"
                     >

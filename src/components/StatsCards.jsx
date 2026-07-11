@@ -1,14 +1,15 @@
 import { useContext } from "react"
 
 import {
-  FiDollarSign,
+  FiWallet,
   FiTrendingUp,
   FiTrendingDown,
 } from "react-icons/fi"
 
 import { TransactionContext }
   from "../context/TransactionContext"
-
+import { formatCurrency }
+  from "../utils/formatCurrency"
 function StatsCards() {
 
   const { transactions } =
@@ -37,32 +38,31 @@ function StatsCards() {
   const totalBalance =
     income - expenses
 
-  const cards = [
-    {
-      title: "Total Balance",
-      amount: `$${totalBalance.toLocaleString()}`,
-      icon: <FiDollarSign />,
-      color:
-        "bg-violet-500/20 text-violet-400",
-    },
+const cards = [
+  {
+    title: "Total Balance",
+    amount: formatCurrency(totalBalance),
+    icon: <FiWallet />,
+    color:
+      "bg-violet-500/20 text-violet-400",
+  },
 
-    {
-      title: "Income",
-      amount: `$${income.toLocaleString()}`,
-      icon: <FiTrendingUp />,
-      color:
-        "bg-green-500/20 text-green-400",
-    },
+  {
+    title: "Income",
+    amount: formatCurrency(income),
+    icon: <FiTrendingUp />,
+    color:
+      "bg-green-500/20 text-green-400",
+  },
 
-    {
-      title: "Expenses",
-      amount: `$${expenses.toLocaleString()}`,
-      icon: <FiTrendingDown />,
-      color:
-        "bg-red-500/20 text-red-400",
-    },
-  ]
-
+  {
+    title: "Expenses",
+    amount: formatCurrency(expenses),
+    icon: <FiTrendingDown />,
+    color:
+      "bg-red-500/20 text-red-400",
+  },
+]
   return (
 
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">

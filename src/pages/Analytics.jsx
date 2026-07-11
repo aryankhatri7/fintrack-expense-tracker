@@ -1,3 +1,6 @@
+import ExpenseChart
+  from "../charts/ExpenseChart"
+
 import MonthlyBarChart
   from "../charts/MonthlyBarChart"
 
@@ -22,16 +25,17 @@ function Analytics() {
       <AnalyticsStats />
 
       {/* Charts Grid */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8">
+<div className="grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8">
 
-        <MonthlyBarChart />
+  <ExpenseChart />
 
-        <IncomeExpenseChart />
+  <IncomeExpenseChart />
 
-      </div>
+  <MonthlyBarChart />
 
-      {/* Weekly Chart */}
-      <WeeklySpendingChart />
+  <WeeklySpendingChart />
+
+</div>
 
     </div>
 

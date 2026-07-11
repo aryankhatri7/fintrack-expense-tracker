@@ -1,3 +1,5 @@
+import { useContext } from "react"
+
 import {
   LineChart,
   Line,
@@ -7,44 +9,56 @@ import {
   ResponsiveContainer,
 } from "recharts"
 
-const data = [
-  {
-    day: "Mon",
-    spending: 120,
-  },
+import { TransactionContext }
+  from "../context/TransactionContext"
 
-  {
-    day: "Tue",
-    spending: 98,
-  },
-
-  {
-    day: "Wed",
-    spending: 210,
-  },
-
-  {
-    day: "Thu",
-    spending: 160,
-  },
-
-  {
-    day: "Fri",
-    spending: 280,
-  },
-
-  {
-    day: "Sat",
-    spending: 320,
-  },
-
-  {
-    day: "Sun",
-    spending: 190,
-  },
-]
+  import { formatCurrency }
+  from "../utils/formatCurrency"
 
 function WeeklySpendingChart() {
+
+  const { transactions } =
+    useContext(TransactionContext)
+
+  const days = [
+    "Sun",
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat",
+  ]
+
+  const data = days.map((day, index) => {
+
+    const weeklyExpense =
+      transactions
+        .filter((item) => {
+
+          if (item.type !== "expense")
+            return false
+
+          const date =
+            new Date(item.createdAt)
+
+          return (
+            date.getDay() === index
+          )
+
+        })
+        .reduce(
+          (sum, item) =>
+            sum + item.amount,
+          0
+        )
+
+    return {
+      day,
+      spending: weeklyExpense,
+    }
+
+  })
 
   return (
 
@@ -92,15 +106,19 @@ function WeeklySpendingChart() {
               tick={{ fontSize: 12 }}
             />
 
-            <Tooltip
-              contentStyle={{
-                background: "#0f172a",
-                border:
-                  "1px solid rgba(255,255,255,0.1)",
-                borderRadius: "16px",
-                color: "#fff",
-              }}
-            />
+           <Tooltip
+  formatter={(value) => [
+    formatCurrency(value),
+    "Spending",
+  ]}
+  contentStyle={{
+    background: "#0f172a",
+    border:
+      "1px solid rgba(255,255,255,0.1)",
+    borderRadius: "16px",
+    color: "#fff",
+  }}
+/>
 
             <Line
               type="monotone"
@@ -124,6 +142,7 @@ function WeeklySpendingChart() {
     </div>
 
   )
+
 }
 
 export default WeeklySpendingChart

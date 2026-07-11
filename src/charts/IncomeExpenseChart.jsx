@@ -1,3 +1,5 @@
+import { useContext } from "react"
+
 import {
   AreaChart,
   Area,
@@ -7,46 +9,78 @@ import {
   ResponsiveContainer,
 } from "recharts"
 
-const data = [
-  {
-    month: "Jan",
-    income: 2400,
-    expense: 1400,
-  },
-
-  {
-    month: "Feb",
-    income: 2800,
-    expense: 1700,
-  },
-
-  {
-    month: "Mar",
-    income: 3200,
-    expense: 1900,
-  },
-
-  {
-    month: "Apr",
-    income: 3000,
-    expense: 2200,
-  },
-
-  {
-    month: "May",
-    income: 3600,
-    expense: 2100,
-  },
-
-  {
-    month: "Jun",
-    income: 4000,
-    expense: 2600,
-  },
-]
+import { TransactionContext }
+  from "../context/TransactionContext"
+import { formatCurrency }
+  from "../utils/formatCurrency"
 
 function IncomeExpenseChart() {
+const { transactions } =
+  useContext(TransactionContext)
+  const currentYear =
+  new Date().getFullYear();
 
+  const months = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+]
+
+const data = months.map((month, index) => {
+
+
+const monthlyTransactions =
+  transactions.filter((item) => {
+
+    const date = new Date(item.createdAt);
+
+    return (
+      date.getMonth() === index &&
+      date.getFullYear() === currentYear
+    );
+
+  });
+
+  const income =
+    monthlyTransactions
+      .filter(
+        (item) =>
+          item.type === "income"
+      )
+      .reduce(
+        (sum, item) =>
+          sum + item.amount,
+        0
+      )
+
+  const expense =
+    monthlyTransactions
+      .filter(
+        (item) =>
+          item.type === "expense"
+      )
+      .reduce(
+        (sum, item) =>
+          sum + item.amount,
+        0
+      )
+
+  return {
+    month,
+    income,
+    expense,
+  }
+
+})
   return (
 
     <div className="bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-3xl p-5 md:p-6 transition-all duration-300">
@@ -94,14 +128,15 @@ function IncomeExpenseChart() {
             />
 
             <Tooltip
-              contentStyle={{
-                background: "#0f172a",
-                border:
-                  "1px solid rgba(255,255,255,0.1)",
-                borderRadius: "16px",
-                color: "#fff",
-              }}
-            />
+  formatter={(value) => formatCurrency(value)}
+  contentStyle={{
+    background: "#0f172a",
+    border:
+      "1px solid rgba(255,255,255,0.1)",
+    borderRadius: "16px",
+    color: "#fff",
+  }}
+/>
 
             <Area
               type="monotone"

@@ -1,7 +1,7 @@
 import { useContext } from "react"
 
 import {
-  FiWallet,
+  FiDollarSign,
   FiTrendingUp,
   FiTrendingDown,
 } from "react-icons/fi"
@@ -42,7 +42,7 @@ const cards = [
   {
     title: "Total Balance",
     amount: formatCurrency(totalBalance),
-    icon: <FiWallet />,
+    icon: <FiDollarSign />,
     color:
       "bg-violet-500/20 text-violet-400",
   },

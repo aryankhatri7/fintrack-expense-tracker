@@ -148,7 +148,7 @@ function Transactions() {
             filteredTransactions.map((item) => (
 
               <div
-                key={item.id}
+                key={item._id}
                 className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-slate-50 dark:bg-white/5 border border-black/10 dark:border-white/10 p-4 md:p-5 rounded-2xl hover:bg-slate-100 dark:hover:bg-white/10 transition-all duration-300"
               >
 
@@ -215,7 +215,7 @@ function Transactions() {
 
                     <button
                       onClick={() =>
-                        deleteTransaction(item.id)
+                        deleteTransaction(item._id)
                       }
                       className="text-slate-400 dark:text-white/40 hover:text-red-400 transition-all"
                     >

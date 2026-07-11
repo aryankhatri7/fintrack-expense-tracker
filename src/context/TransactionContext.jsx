@@ -6,6 +6,14 @@ import {
 
 import { toast } from "react-toastify"
 
+import { useAuth } from "./AuthContext";
+import {
+  getTransactions,
+  createTransaction,
+  deleteTransaction as deleteTransactionService,
+  updateTransaction as updateTransactionService,
+} from "../services/transactionService";
+
 export const TransactionContext =
   createContext()
 
@@ -13,77 +21,86 @@ function TransactionProvider({
   children,
 }) {
 
-  const [transactions, setTransactions] =
-    useState(() => {
+const { token } = useAuth();
 
-      const savedTransactions =
-        localStorage.getItem("transactions")
+  const [transactions, setTransactions] = useState([]);
+useEffect(() => {
+  const fetchTransactions = async () => {
+    if (!token) {
+      setTransactions([]);
+      return;
+    }
 
-      return savedTransactions
-        ? JSON.parse(savedTransactions)
-        : []
+    try {
+      const data = await getTransactions(token);
+      setTransactions(data);
+    } catch (error) {
+      toast.error("Failed to load transactions");
+      console.error(error);
+    }
+  };
 
-    })
-
+  fetchTransactions();
+}, [token]);
   // Add Transaction
-  const addTransaction = (
-    transaction
-  ) => {
+  const addTransaction = async (transaction) => {
+  try {
+    const newTransaction = await createTransaction(
+      transaction,
+      token
+    );
 
     setTransactions((prev) => [
-      transaction,
+      newTransaction,
       ...prev,
-    ])
+    ]);
 
-    toast.success(
-      "Transaction added successfully"
-    )
-
+    toast.success("Transaction added successfully");
+  } catch (error) {
+    toast.error("Failed to add transaction");
+    console.error(error);
   }
+};
+
+  
 
   // Delete Transaction
-  const deleteTransaction = (id) => {
+const deleteTransaction = async (id) => {
+  try {
+    await deleteTransactionService(id, token);
 
     setTransactions((prev) =>
-      prev.filter(
-        (item) => item.id !== id
-      )
-    )
+      prev.filter((item) => item._id !== id)
+    );
 
-    toast.error(
-      "Transaction deleted"
-    )
-
+    toast.success("Transaction deleted successfully");
+  } catch (error) {
+    toast.error("Failed to delete transaction");
+    console.error(error);
   }
-
-  // Edit Transaction
-  const editTransaction = (
-    updatedTransaction
-  ) => {
+};
+// Edit Transaction
+const editTransaction = async (updatedTransaction) => {
+  try {
+    const updated = await updateTransactionService(
+      updatedTransaction._id,
+      updatedTransaction,
+      token
+    );
 
     setTransactions((prev) =>
       prev.map((item) =>
-        item.id === updatedTransaction.id
-          ? updatedTransaction
-          : item
+        item._id === updated._id ? updated : item
       )
-    )
+    );
 
-    toast.info(
-      "Transaction updated"
-    )
-
+    toast.success("Transaction updated successfully");
+  } catch (error) {
+    toast.error("Failed to update transaction");
+    console.error(error);
   }
+};
 
-  // Save to LocalStorage
-  useEffect(() => {
-
-    localStorage.setItem(
-      "transactions",
-      JSON.stringify(transactions)
-    )
-
-  }, [transactions])
 
   return (
 

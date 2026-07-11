@@ -66,26 +66,18 @@ function AddTransactionModal({
     ) return
 
     const transactionData = {
-      id: editData
-        ? editData.id
-        : Date.now(),
+  _id: editData ? editData._id : undefined,
 
-      title: formData.title,
+  title: formData.title,
 
-      amount: Number(
-        formData.amount
-      ),
+  amount: Number(formData.amount),
 
-      category: formData.category,
+  category: formData.category,
 
-      type: formData.type,
+  type: formData.type,
 
-      notes: formData.notes,
-
-      createdAt: editData
-        ? editData.createdAt
-        : new Date(),
-    }
+  notes: formData.notes,
+};
 
     if (editData) {
 

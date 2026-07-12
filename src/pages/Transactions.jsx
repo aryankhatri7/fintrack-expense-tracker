@@ -23,8 +23,14 @@ function Transactions() {
   const [searchTerm, setSearchTerm] =
     useState("")
 
+  const [categoryFilter, setCategoryFilter] =
+  useState("all");
+
   const [filterType, setFilterType] =
     useState("all")
+
+    const [sortBy, setSortBy] =
+  useState("newest")
 
   const [openModal, setOpenModal] =
     useState(false)
@@ -33,33 +39,164 @@ function Transactions() {
     selectedTransaction,
     setSelectedTransaction,
   ] = useState(null)
+  const clearFilters = () => {
+
+  setSearchTerm("");
+
+  setFilterType("all");
+
+  setCategoryFilter("all");
+
+  setSortBy("newest");
+
+};
 
   const filteredTransactions =
     transactions.filter((item) => {
 
-      const matchesSearch =
-        item.title
-          .toLowerCase()
-          .includes(
-            searchTerm.toLowerCase()
-          )
+    const matchesSearch =
+  (item.title || "")
+    .toLowerCase()
+    .includes(searchTerm.toLowerCase()) ||
 
-      const matchesFilter =
-        filterType === "all"
-          ? true
-          : item.type === filterType
+  (item.category || "")
+    .toLowerCase()
+    .includes(searchTerm.toLowerCase()) ||
 
-      return (
-        matchesSearch &&
-        matchesFilter
-      )
+  (item.type || "")
+    .toLowerCase()
+    .includes(searchTerm.toLowerCase());
+
+      const matchesType =
+  filterType === "all"
+    ? true
+    : item.type === filterType;
+
+const matchesCategory =
+  categoryFilter === "all"
+    ? true
+    : item.category === categoryFilter;
+
+return (
+  matchesSearch &&
+  matchesType &&
+  matchesCategory
+);
 
     })
+    const sortedTransactions = [...filteredTransactions];
+
+sortedTransactions.sort((a, b) => {
+
+  switch (sortBy) {
+
+    case "highest":
+      return b.amount - a.amount;
+
+    case "lowest":
+      return a.amount - b.amount;
+
+    case "az":
+      return (a.title || "").localeCompare(
+  b.title || "",
+  undefined,
+  { sensitivity: "base" }
+);
+
+    case "za":
+      return (b.title || "").localeCompare(
+  a.title || "",
+  undefined,
+  {
+    sensitivity: "base",
+  }
+);
+
+    case "oldest":
+      return new Date(a.createdAt) -
+        new Date(b.createdAt);
+
+    default:
+      return new Date(b.createdAt) -
+        new Date(a.createdAt);
+
+  }
+
+});
+const totalIncome = sortedTransactions
+  .filter((item) => item.type === "income")
+  .reduce((sum, item) => sum + item.amount, 0);
+
+const totalExpense = sortedTransactions
+  .filter((item) => item.type === "expense")
+  .reduce((sum, item) => sum + item.amount, 0);
+
+const netBalance = totalIncome - totalExpense;
+
+const categories = [
+  "all",
+  ...new Set(
+      transactions
+        .map(item => item.category)
+        .filter(Boolean)
+  ),
+];
 
   return (
 
     <div className="space-y-6 md:space-y-8">
 
+<div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+
+  <div className="bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl p-5">
+
+    <p className="text-sm text-slate-500 dark:text-white/50">
+      Total Balance
+    </p>
+
+    <h2 className="mt-2 text-2xl font-bold text-violet-600 dark:text-violet-400">
+      {formatCurrency(netBalance)}
+    </h2>
+
+  </div>
+
+  <div className="bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl p-5">
+
+    <p className="text-sm text-slate-500 dark:text-white/50">
+      Income
+    </p>
+
+    <h2 className="mt-2 text-2xl font-bold text-green-500">
+      {formatCurrency(totalIncome)}
+    </h2>
+
+  </div>
+
+  <div className="bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl p-5">
+
+    <p className="text-sm text-slate-500 dark:text-white/50">
+      Expense
+    </p>
+
+    <h2 className="mt-2 text-2xl font-bold text-red-500">
+      {formatCurrency(totalExpense)}
+    </h2>
+
+  </div>
+
+  <div className="bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl p-5">
+
+    <p className="text-sm text-slate-500 dark:text-white/50">
+      Transactions
+    </p>
+
+    <h2 className="mt-2 text-2xl font-bold text-blue-500">
+      {sortedTransactions.length}
+    </h2>
+
+  </div>
+
+</div>
      
       {/* Main Card */}
       <div className="bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-4 md:p-6 transition-all duration-300">
@@ -90,7 +227,7 @@ function Transactions() {
           </div>
 
           {/* Filter Buttons */}
-          <div className="grid grid-cols-3 gap-3">
+          <div className="flex flex-wrap gap-3">
 
             <button
               onClick={() =>
@@ -130,7 +267,70 @@ function Transactions() {
             >
               Expense
             </button>
+            
+<select
+  value={categoryFilter}
+  onChange={(e) =>
+    setCategoryFilter(e.target.value)
+  }
+  className="bg-slate-100 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl px-4 py-3 text-slate-900 dark:text-white"
+>
+  {categories.map((category) => (
+    <option
+      key={category}
+      value={category}
+    >
+      {category.charAt(0).toUpperCase() +
+ category.slice(1)}
+    </option>
+  ))}
+</select>
+<select
+  value={sortBy}
+  onChange={(e) =>
+    setSortBy(e.target.value)
+  }
+  className="bg-slate-100 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl px-4 py-3 text-slate-900 dark:text-white"
+>
 
+  <option value="newest">
+    Newest
+  </option>
+
+  <option value="oldest">
+    Oldest
+  </option>
+
+  <option value="highest">
+    Highest Amount
+  </option>
+
+  <option value="lowest">
+    Lowest Amount
+  </option>
+
+  <option value="az">
+    A-Z
+  </option>
+
+  <option value="za">
+    Z-A
+  </option>
+</select>
+
+<button
+  onClick={clearFilters}
+  className="px-4 py-3 rounded-2xl
+  bg-slate-100
+  dark:bg-white/5
+  border border-black/10
+  dark:border-white/10
+  hover:bg-violet-600
+  hover:text-white
+  transition-all"
+>
+  Clear
+</button>
           </div>
 
         </div>
@@ -138,7 +338,7 @@ function Transactions() {
         {/* Transactions */}
         <div className="space-y-4">
 
-          {filteredTransactions.length === 0 ? (
+          {sortedTransactions.length === 0 ? (
 
             <div className="text-center py-10 text-slate-500 dark:text-white/50">
               No transactions found
@@ -146,7 +346,7 @@ function Transactions() {
 
           ) : (
 
-            filteredTransactions.map((item) => (
+            sortedTransactions.map((item) => (
 
               <div
                 key={item._id}
@@ -163,7 +363,10 @@ function Transactions() {
                   <div className="flex items-center flex-wrap gap-2 mt-2">
 
                     <span className="text-slate-500 dark:text-white/50 text-sm">
-                      {item.category}
+                      {item.category
+  ? item.category.charAt(0).toUpperCase() +
+    item.category.slice(1)
+  : "Uncategorized"}
                     </span>
 
                     <span
@@ -215,9 +418,11 @@ function Transactions() {
                     </button>
 
                     <button
-                      onClick={() =>
-                        deleteTransaction(item._id)
-                      }
+                      onClick={() => {
+    if (window.confirm("Delete this transaction?")) {
+        deleteTransaction(item._id);
+    }
+}}
                       className="text-slate-400 dark:text-white/40 hover:text-red-400 transition-all"
                     >
                       <FiTrash2 size={20} />

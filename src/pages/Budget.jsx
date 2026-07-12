@@ -53,15 +53,36 @@ function Budget() {
     totalBudget > 0
       ? (spent / totalBudget) * 100
       : 0
+const today = new Date();
 
-  const dailyAverage =
-    (spent / 30).toFixed(0)
+const currentDay = today.getDate();
+
+const dailyAverage =
+  currentDay > 0
+    ? (spent / currentDay).toFixed(0)
+    : 0;
 
   const remainingPercent =
     Math.max(0, 100 - progress).toFixed(0)
 
-  const safeToSpend =
-    (remaining / 30).toFixed(0)
+
+
+const daysInMonth = new Date(
+  today.getFullYear(),
+  today.getMonth() + 1,
+  0
+).getDate();
+
+const daysRemaining =
+  daysInMonth - today.getDate() + 1;
+
+const safeToSpend =
+  daysRemaining > 0
+    ? Math.max(
+        0,
+        remaining / daysRemaining
+      ).toFixed(0)
+    : 0;
 
   return (
 
@@ -129,7 +150,7 @@ function Budget() {
             </p>
 
             <p className="text-slate-900 dark:text-white font-semibold whitespace-nowrap">
-              {progress.toFixed(0)}%
+              {Math.min(progress, 100).toFixed(0)}%
             </p>
 
           </div>
@@ -138,7 +159,7 @@ function Budget() {
 
             <div
               className={`h-full rounded-full transition-all duration-500 ${
-                progress < 50
+                Math.min(progress, 100) < 50
                   ? "bg-green-500"
                   : progress < 80
                   ? "bg-yellow-500"
@@ -171,7 +192,7 @@ function Budget() {
         )}
 
         {/* Analytics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mt-8">
 
           <div className="bg-slate-50 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl p-5">
 
@@ -197,17 +218,31 @@ function Budget() {
 
           </div>
 
-          <div className="bg-slate-50 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl p-5">
+          {/* Safe Daily Spend */}
+<div className="bg-slate-50 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl p-5">
 
-            <p className="text-slate-500 dark:text-white/50 text-sm">
-              Safe Daily Spend
-            </p>
+  <p className="text-slate-500 dark:text-white/50 text-sm">
+    Safe Daily Spend
+  </p>
 
-            <h3 className="text-green-400 text-2xl md:text-3xl font-bold mt-2">
-              {formatCurrency(Number(safeToSpend))}
-            </h3>
+  <h3 className="text-green-400 text-2xl md:text-3xl font-bold mt-2">
+    {formatCurrency(Number(safeToSpend))}
+  </h3>
 
-          </div>
+</div>
+
+{/* Days Remaining */}
+<div className="bg-slate-50 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl p-5">
+
+  <p className="text-slate-500 dark:text-white/50 text-sm">
+    Days Remaining
+  </p>
+
+  <h3 className="text-blue-400 text-2xl md:text-3xl font-bold mt-2">
+    {daysRemaining} Days
+  </h3>
+
+</div>
 
         </div>
 

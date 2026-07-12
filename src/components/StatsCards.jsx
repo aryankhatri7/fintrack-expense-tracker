@@ -8,64 +8,50 @@ import {
 
 import { TransactionContext }
   from "../context/TransactionContext"
-import { formatCurrency }
-  from "../utils/formatCurrency"
+
+  import { formatCurrency } from "../utils/formatCurrency";
+import { getCurrentMonthStats } from "../utils/dashboardAnalytics";
+
+
 function StatsCards() {
 
   const { transactions } =
     useContext(TransactionContext)
-
-  const income = transactions
-    .filter((item) =>
-      item.type === "income"
-    )
-    .reduce(
-      (acc, item) =>
-        acc + item.amount,
-      0
-    )
-
-  const expenses = transactions
-    .filter((item) =>
-      item.type === "expense"
-    )
-    .reduce(
-      (acc, item) =>
-        acc + item.amount,
-      0
-    )
-
-  const totalBalance =
-    income - expenses
-
+const {
+  totalBalance,
+  monthIncome,
+  monthExpense,
+  monthSavings,
+} = getCurrentMonthStats(transactions);
 const cards = [
   {
-    title: "Total Balance",
+    title: "Net Balance",
     amount: formatCurrency(totalBalance),
     icon: <FiDollarSign />,
-    color:
-      "bg-violet-500/20 text-violet-400",
+    color: "bg-violet-500/20 text-violet-400",
   },
-
   {
-    title: "Income",
-    amount: formatCurrency(income),
+    title: "This Month Income",
+    amount: formatCurrency(monthIncome),
     icon: <FiTrendingUp />,
-    color:
-      "bg-green-500/20 text-green-400",
+    color: "bg-green-500/20 text-green-400",
   },
-
   {
-    title: "Expenses",
-    amount: formatCurrency(expenses),
+    title: "This Month Expenses",
+    amount: formatCurrency(monthExpense),
     icon: <FiTrendingDown />,
-    color:
-      "bg-red-500/20 text-red-400",
+    color: "bg-red-500/20 text-red-400",
   },
-]
+  {
+    title: "This Month Savings",
+    amount: formatCurrency(monthSavings),
+    icon: <FiDollarSign />,
+    color: "bg-blue-500/20 text-blue-400",
+  },
+];
   return (
 
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
 
       {cards.map((card) => (
 

@@ -3,6 +3,10 @@ import bcrypt from "bcryptjs";
 import validator from "validator";
 import generateToken from "../utils/generateToken.js";
 
+// Strong Password Regex
+const passwordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+
 // ==========================
 // Register User
 // ==========================
@@ -26,11 +30,12 @@ export const registerUser = async (req, res) => {
       });
     }
 
-    // Password Length
-    if (password.length < 6) {
+    // Validate Password
+    if (!passwordRegex.test(password)) {
       return res.status(400).json({
         success: false,
-        message: "Password must be at least 6 characters",
+        message:
+          "Password must be at least 8 characters and include uppercase, lowercase, a number, and a special character.",
       });
     }
 
@@ -55,7 +60,7 @@ export const registerUser = async (req, res) => {
       password: hashedPassword,
     });
 
-    // Generate Token
+    // Generate JWT Token
     const token = generateToken(user._id);
 
     res.status(201).json({
@@ -112,7 +117,7 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    // Generate Token
+    // Generate JWT Token
     const token = generateToken(user._id);
 
     res.status(200).json({
@@ -143,6 +148,7 @@ export const getMe = async (req, res) => {
     user: req.user,
   });
 };
+
 // ==========================
 // Update Profile
 // ==========================
@@ -172,6 +178,83 @@ export const updateProfile = async (req, res) => {
       success: true,
       message: "Profile updated successfully",
       user: updatedUser,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// ==========================
+// Change Password
+// ==========================
+export const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    // Check Empty Fields
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required",
+      });
+    }
+
+    // Validate New Password
+    if (!passwordRegex.test(newPassword)) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Password must be at least 8 characters and include uppercase, lowercase, a number, and a special character.",
+      });
+    }
+
+    // Get User
+    const user = await User.findById(req.user._id);
+
+    // Verify Current Password
+    const isMatch = await bcrypt.compare(
+      currentPassword,
+      user.password
+    );
+
+    if (!isMatch) {
+      return res.status(400).json({
+        success: false,
+        message: "Current password is incorrect",
+      });
+    }
+
+    // Prevent Reusing Old Password
+    const samePassword = await bcrypt.compare(
+      newPassword,
+      user.password
+    );
+
+    if (samePassword) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "New password must be different from current password",
+      });
+    }
+
+    // Hash New Password
+    const salt = await bcrypt.genSalt(10);
+
+    user.password = await bcrypt.hash(
+      newPassword,
+      salt
+    );
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password changed successfully",
     });
 
   } catch (error) {

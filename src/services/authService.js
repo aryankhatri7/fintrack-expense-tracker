@@ -20,13 +20,27 @@ export const getCurrentUser = async (token) => {
     },
   });
 
-  return response.data;
+  return response.data.user;
 };
 // Update Profile
 export const updateProfile = async (name, token) => {
   const response = await api.put(
     "/auth/profile",
     { name },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response.data;
+};
+// Change Password
+export const changePassword = async (passwordData, token) => {
+  const response = await api.put(
+    "/auth/change-password",
+    passwordData,
     {
       headers: {
         Authorization: `Bearer ${token}`,

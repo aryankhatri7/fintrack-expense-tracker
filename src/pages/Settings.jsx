@@ -14,7 +14,7 @@ import { ThemeContext }
   import { useAuth } from "../context/AuthContext"
 
   import EditProfileModal from "../components/EditProfileModal"
-
+import ChangePasswordModal from "../components/ChangePasswordModal";
 function Settings() {
 
   const {
@@ -25,7 +25,7 @@ function Settings() {
   const { user } = useAuth()
 
   const [openProfileModal, setOpenProfileModal] = useState(false)
-
+  const [openPasswordModal, setOpenPasswordModal] = useState(false);
   return (
 
     <div className="space-y-6 md:space-y-8">
@@ -104,6 +104,12 @@ function Settings() {
   className="w-full mt-6 bg-violet-600 hover:bg-violet-700 text-white font-semibold py-3 rounded-2xl transition-all duration-300"
 >
   Edit Profile
+</button>
+<button
+  onClick={() => setOpenPasswordModal(true)}
+  className="w-full mt-3 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-2xl transition-all duration-300"
+>
+  Change Password
 </button>
           </div>
 
@@ -201,6 +207,10 @@ function Settings() {
 <EditProfileModal
   isOpen={openProfileModal}
   onClose={() => setOpenProfileModal(false)}
+/>
+<ChangePasswordModal
+  isOpen={openPasswordModal}
+  onClose={() => setOpenPasswordModal(false)}
 />
     </div>
 

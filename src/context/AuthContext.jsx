@@ -10,6 +10,7 @@ import {
   registerUser,
   getCurrentUser,
   updateProfile,
+  changePassword,
 } from "../services/authService";
 
 export const AuthContext = createContext();
@@ -65,6 +66,22 @@ const updateUserProfile = async (name) => {
 
   return data.user;
 };
+
+const updatePassword = async (
+  currentPassword,
+  newPassword
+) => {
+  const data = await changePassword(
+    {
+      currentPassword,
+      newPassword,
+    },
+    token
+  );
+
+  return data;
+};
+
 // Restore user on page refresh
 useEffect(() => {
   const restoreUser = async () => {
@@ -102,6 +119,7 @@ useEffect(() => {
         register,
         logout,
         updateUserProfile,
+        updatePassword,
       }}
     >
       {children}

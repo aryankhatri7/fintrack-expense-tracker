@@ -8,6 +8,7 @@ import {
 import {
   loginUser,
   registerUser,
+  googleLogin,
   getCurrentUser,
   updateProfile,
   changePassword,
@@ -39,6 +40,20 @@ function AuthProvider({ children }) {
 
     return currentUser;
   };
+
+  const loginWithGoogle = async (credential) => {
+  const data = await googleLogin(credential);
+
+  localStorage.setItem("token", data.token);
+
+  setToken(data.token);
+
+  const currentUser = await getCurrentUser(data.token);
+
+  setUser(currentUser);
+
+  return currentUser;
+};
 
   // Register
   const register = async (name, email, password) => {
@@ -116,6 +131,7 @@ useEffect(() => {
         token,
         setToken,
         login,
+        loginWithGoogle,
         register,
         logout,
         updateUserProfile,

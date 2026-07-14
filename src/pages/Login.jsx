@@ -9,7 +9,7 @@ function Login() {
   const [email, setEmail] = useState("");
 const [password, setPassword] = useState("");
 
-const { login } = useAuth();
+const { login, loginWithGoogle } = useAuth();
 
 const navigate = useNavigate();
 const handleSubmit = async (e) => {
@@ -79,13 +79,26 @@ const handleSubmit = async (e) => {
         </button>
         <div className="mt-5">
   <GoogleLogin
-    onSuccess={(credentialResponse) => {
-      console.log("Google Success:", credentialResponse);
-    }}
-    onError={() => {
-      console.log("Google Login Failed");
-    }}
-  />
+  onSuccess={async (credentialResponse) => {
+    try {
+      await loginWithGoogle(
+        credentialResponse.credential
+      );
+
+      toast.success("Login successful!");
+
+      navigate("/");
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message ||
+          "Google Login Failed"
+      );
+    }
+  }}
+  onError={() => {
+    toast.error("Google Login Failed");
+  }}
+/>
 </div>
       </form>
     </AuthLayout>

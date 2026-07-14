@@ -2,7 +2,7 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import validator from "validator";
 import generateToken from "../utils/generateToken.js";
-
+import client from "../utils/googleClient.js";
 // Strong Password Regex
 const passwordRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
@@ -106,6 +106,15 @@ export const loginUser = async (req, res) => {
         message: "Invalid email or password",
       });
     }
+   
+    // Prevent email/password login for Google accounts
+if (user.provider === "google") {
+  return res.status(400).json({
+    success: false,
+    message:
+      "This account was created with Google. Please continue with Google.",
+  });
+}
 
     // Compare Password
     const isMatch = await bcrypt.compare(password, user.password);
@@ -215,6 +224,15 @@ export const changePassword = async (req, res) => {
     // Get User
     const user = await User.findById(req.user._id);
 
+    // Google users don't have a local password
+if (user.provider === "google") {
+  return res.status(400).json({
+    success: false,
+    message:
+      "Google accounts cannot change password. Please use your Google account settings.",
+  });
+}
+
     // Verify Current Password
     const isMatch = await bcrypt.compare(
       currentPassword,
@@ -255,6 +273,76 @@ export const changePassword = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Password changed successfully",
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+// ==========================
+// Google Login
+// ==========================
+export const googleLogin = async (req, res) => {
+  try {
+    const { credential } = req.body;
+
+    if (!credential) {
+      return res.status(400).json({
+        success: false,
+        message: "Google credential is required",
+      });
+    }
+
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    const {
+      email,
+      name,
+      picture,
+      sub,
+    } = payload;
+
+    let user = await User.findOne({ email });
+
+if (!user) {
+  // New Google user
+  user = await User.create({
+    name,
+    email,
+    provider: "google",
+    googleId: sub,
+    picture,
+  });
+} else {
+  // Existing account: link Google if not already linked
+  if (!user.googleId) {
+    user.googleId = sub;
+    user.picture = picture;
+
+    await user.save();
+  }
+}
+
+    const token = generateToken(user._id);
+
+    res.status(200).json({
+      success: true,
+      message: "Google login successful",
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        picture,
+      },
     });
 
   } catch (error) {

@@ -105,12 +105,14 @@ function Settings() {
 >
   Edit Profile
 </button>
-<button
-  onClick={() => setOpenPasswordModal(true)}
-  className="w-full mt-3 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-2xl transition-all duration-300"
->
-  Change Password
-</button>
+{user?.provider !== "google" && (
+  <button
+    onClick={() => setOpenPasswordModal(true)}
+    className="w-full mt-3 bg-red-600 hover:bg-red-700 text-white font-semibold py-3 rounded-2xl transition-all duration-300"
+  >
+    Change Password
+  </button>
+)}
           </div>
 
         </div>

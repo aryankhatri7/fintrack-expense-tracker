@@ -50,3 +50,11 @@ export const changePassword = async (passwordData, token) => {
 
   return response.data;
 };
+
+export const googleLogin = async (credential) => {
+  const response = await api.post("/auth/google", {
+    credential,
+  });
+
+  return response.data;
+};

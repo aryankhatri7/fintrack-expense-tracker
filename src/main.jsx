@@ -1,3 +1,4 @@
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import React from "react"
 import ReactDOM from "react-dom/client"
 import AuthProvider from "./context/AuthContext";
@@ -14,6 +15,10 @@ ReactDOM.createRoot(
 ).render(
 
   <React.StrictMode>
+
+    <GoogleOAuthProvider
+    clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+  >
 
     <ThemeProvider>
 
@@ -34,6 +39,8 @@ ReactDOM.createRoot(
   </AuthProvider>
 
 </ThemeProvider>
+
+</GoogleOAuthProvider>
 
   </React.StrictMode>
 

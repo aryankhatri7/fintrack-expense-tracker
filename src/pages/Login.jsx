@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
+import { GoogleLogin } from "@react-oauth/google";
 import AuthLayout from "../components/auth/AuthLayout";
 import { useAuth } from "../context/AuthContext";
 
@@ -77,7 +77,16 @@ const handleSubmit = async (e) => {
         >
           Sign In
         </button>
-
+        <div className="mt-5">
+  <GoogleLogin
+    onSuccess={(credentialResponse) => {
+      console.log("Google Success:", credentialResponse);
+    }}
+    onError={() => {
+      console.log("Google Login Failed");
+    }}
+  />
+</div>
       </form>
     </AuthLayout>
   );

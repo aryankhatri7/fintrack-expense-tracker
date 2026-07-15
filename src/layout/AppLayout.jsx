@@ -29,28 +29,25 @@ function AppLayout() {
 
         <Routes>
 
-          <Route
-            path="/"
-            element={<Dashboard />}
-          />
+          <Route index element={<Dashboard />} />
 
           <Route
-            path="/analytics"
+            path="analytics"
             element={<Analytics />}
           />
 
           <Route
-            path="/transactions"
+            path="transactions"
             element={<Transactions />}
           />
 
           <Route
-            path="/budget"
+            path="budget"
             element={<Budget />}
           />
 
           <Route
-            path="/settings"
+            path="settings"
             element={<Settings />}
           />
 

@@ -4,6 +4,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import Home from "./pages/Landing/Home";
 import PublicRoute from "./components/auth/PublicRoute";
 import AppLayout from "./layout/AppLayout";
 import Login from "./pages/Login";
@@ -15,6 +16,7 @@ function App() {
       <Routes>
 
         {/* Public Routes */}
+        <Route path="/" element={<Home />} />
         <Route
   path="/login"
   element={
@@ -35,7 +37,7 @@ function App() {
 
         {/* Protected Application */}
 <Route
-  path="/*"
+  path="/dashboard/*"
   element={
     <ProtectedRoute>
       <AppLayout />

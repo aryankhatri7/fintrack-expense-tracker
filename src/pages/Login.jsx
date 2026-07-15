@@ -20,7 +20,7 @@ const handleSubmit = async (e) => {
 
     toast.success("Login successful!");
 
-    navigate("/");
+    navigate("/dashboard");
   } catch (error) {
     toast.error(
       error.response?.data?.message || "Login failed"
@@ -87,7 +87,7 @@ const handleSubmit = async (e) => {
 
       toast.success("Login successful!");
 
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       toast.error(
         error.response?.data?.message ||

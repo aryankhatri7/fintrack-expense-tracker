@@ -14,31 +14,31 @@ import {
 const navItems = [
   {
     name: "Dashboard",
-    path: "/",
+    path: "/dashboard",
     icon: <FiHome />,
   },
 
   {
     name: "Analytics",
-    path: "/analytics",
+    path: "/dashboard/analytics",
     icon: <FiPieChart />,
   },
 
   {
     name: "Transactions",
-    path: "/transactions",
+    path: "/dashboard/transactions",
     icon: <FiCreditCard />,
   },
 
   {
     name: "Budget",
-    path: "/budget",
+    path: "/dashboard/budget",
     icon: <FiDollarSign />,
   },
 
   {
     name: "Settings",
-    path: "/settings",
+    path: "/dashboard/settings",
     icon: <FiSettings />,
   },
 ]

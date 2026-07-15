@@ -22,7 +22,7 @@ function Register() {
 
       toast.success("Account created successfully!");
 
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Registration failed"

@@ -139,7 +139,19 @@ function Header({ setSidebarOpen }) {
 
           <div className="hidden lg:block w-80">
 
-            <SearchInput placeholder="Search transactions..." />
+            <SearchInput
+  placeholder={
+    location.pathname === "/dashboard/transactions"
+      ? "Search transactions..."
+      : location.pathname === "/dashboard/settings"
+      ? "Search settings..."
+      : location.pathname === "/dashboard/analytics"
+      ? "Search analytics..."
+      : location.pathname === "/dashboard/budget"
+      ? "Search budgets..."
+      : "Search FinTrack..."
+  }
+/>
 
           </div>
 

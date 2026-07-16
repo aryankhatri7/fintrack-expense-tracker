@@ -148,9 +148,14 @@ function Login() {
           className="w-full"
           size="lg"
         >
-          {loading
-            ? "Signing In..."
-            : "Sign In"}
+          {loading ? (
+  <>
+    <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+    Signing In...
+  </>
+) : (
+  "Sign In"
+)}
         </Button>
 
         {/* Divider */}
@@ -165,7 +170,7 @@ function Login() {
 
           <div className="relative flex justify-center">
 
-            <span className="bg-white px-4 text-sm text-slate-500 dark:bg-slate-900 dark:text-slate-400">
+            <span className="bg-slate-50 px-4 text-sm text-slate-500 dark:bg-slate-950 dark:text-slate-400">
               OR
             </span>
 

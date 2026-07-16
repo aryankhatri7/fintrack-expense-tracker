@@ -1,9 +1,17 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { FiLock, FiX } from "react-icons/fi";
+
 import { useAuth } from "../context/AuthContext";
 
+import Card from "./ui/Card";
+import Button from "./ui/Button";
+
+
 function ChangePasswordModal({ isOpen, onClose }) {
+
   const { updatePassword } = useAuth();
+
 
   const [formData, setFormData] = useState({
     currentPassword: "",
@@ -11,25 +19,39 @@ function ChangePasswordModal({ isOpen, onClose }) {
     confirmPassword: "",
   });
 
+
   const [loading, setLoading] = useState(false);
+
+
 
   if (!isOpen) return null;
 
+
+
   const handleChange = (e) => {
+
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+
   };
 
+
+
+
   const handleSubmit = async (e) => {
+
     e.preventDefault();
+
 
     const {
       currentPassword,
       newPassword,
       confirmPassword,
     } = formData;
+
+
 
     if (
       !currentPassword ||
@@ -39,62 +61,186 @@ function ChangePasswordModal({ isOpen, onClose }) {
       return toast.error("All fields are required");
     }
 
+
+
     if (newPassword !== confirmPassword) {
-      return toast.error("Passwords do not match");
+
+      return toast.error(
+        "Passwords do not match"
+      );
+
     }
 
+
+
     try {
+
       setLoading(true);
+
 
       const response = await updatePassword(
         currentPassword,
         newPassword
       );
 
+
       toast.success(response.message);
 
+
+
       setFormData({
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: "",
+        currentPassword:"",
+        newPassword:"",
+        confirmPassword:"",
       });
+
+
 
       onClose();
 
-    } catch (error) {
+
+    } catch(error) {
+
       toast.error(
         error.response?.data?.message ||
-          "Failed to change password"
+        "Failed to change password"
       );
+
+
     } finally {
+
       setLoading(false);
+
     }
+
   };
 
+
+
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
 
-      <div className="w-full max-w-lg rounded-3xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 p-6 md:p-8 shadow-2xl">
+    <div
+      className="
+        fixed
+        inset-0
+        z-50
+        flex
+        items-center
+        justify-center
+        bg-black/50
+        backdrop-blur-md
+        p-4
+      "
+    >
 
-        <div className="flex items-center justify-between mb-6">
 
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-            Change Password
-          </h2>
+      <Card
+        hover={false}
+        className="
+          w-full
+          max-w-lg
+          p-6
+          md:p-8
+        "
+      >
+
+
+
+        {/* Header */}
+
+        <div className="
+          flex
+          items-center
+          justify-between
+          mb-8
+        ">
+
+
+          <div className="
+            flex
+            items-center
+            gap-4
+          ">
+
+
+            <div
+              className="
+                p-3
+                rounded-2xl
+                bg-red-500/10
+                text-red-500
+              "
+            >
+              <FiLock size={22}/>
+            </div>
+
+
+
+            <div>
+
+
+              <h2
+                className="
+                  text-2xl
+                  font-black
+                  text-slate-900
+                  dark:text-white
+                "
+              >
+                Change Password
+              </h2>
+
+
+              <p
+                className="
+                  text-sm
+                  text-slate-500
+                  dark:text-slate-400
+                "
+              >
+                Keep your account secure.
+              </p>
+
+
+            </div>
+
+
+          </div>
+
+
+
 
           <button
             onClick={onClose}
-            className="text-xl text-slate-500 hover:text-slate-900 dark:text-white/60 dark:hover:text-white"
+            className="
+              p-2
+              rounded-xl
+              text-slate-500
+              hover:bg-slate-100
+              dark:hover:bg-white/10
+              transition
+            "
           >
-            ✕
+
+            <FiX size={22}/>
+
           </button>
 
+
+
         </div>
+
+
+
+
+
 
         <form
           onSubmit={handleSubmit}
           className="space-y-5"
         >
+
+
 
           <input
             type="password"
@@ -102,8 +248,25 @@ function ChangePasswordModal({ isOpen, onClose }) {
             placeholder="Current Password"
             value={formData.currentPassword}
             onChange={handleChange}
-            className="w-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-violet-500 text-slate-900 dark:text-white"
+            className="
+              w-full
+              rounded-2xl
+              border
+              border-slate-200
+              dark:border-slate-700
+              bg-slate-50
+              dark:bg-white/5
+              px-4
+              py-3
+              text-slate-900
+              dark:text-white
+              outline-none
+              focus:ring-2
+              focus:ring-emerald-500/40
+            "
           />
+
+
 
           <input
             type="password"
@@ -111,8 +274,25 @@ function ChangePasswordModal({ isOpen, onClose }) {
             placeholder="New Password"
             value={formData.newPassword}
             onChange={handleChange}
-            className="w-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-violet-500 text-slate-900 dark:text-white"
+            className="
+              w-full
+              rounded-2xl
+              border
+              border-slate-200
+              dark:border-slate-700
+              bg-slate-50
+              dark:bg-white/5
+              px-4
+              py-3
+              text-slate-900
+              dark:text-white
+              outline-none
+              focus:ring-2
+              focus:ring-emerald-500/40
+            "
           />
+
+
 
           <input
             type="password"
@@ -120,37 +300,79 @@ function ChangePasswordModal({ isOpen, onClose }) {
             placeholder="Confirm New Password"
             value={formData.confirmPassword}
             onChange={handleChange}
-            className="w-full bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-violet-500 text-slate-900 dark:text-white"
+            className="
+              w-full
+              rounded-2xl
+              border
+              border-slate-200
+              dark:border-slate-700
+              bg-slate-50
+              dark:bg-white/5
+              px-4
+              py-3
+              text-slate-900
+              dark:text-white
+              outline-none
+              focus:ring-2
+              focus:ring-emerald-500/40
+            "
           />
 
-          <div className="flex gap-3">
 
-            <button
+
+
+
+
+          <div className="
+            flex
+            gap-3
+            pt-4
+          ">
+
+
+            <Button
               type="button"
+              variant="secondary"
+              className="flex-1"
               onClick={onClose}
-              className="flex-1 py-3 rounded-2xl border border-slate-300 dark:border-white/10 text-slate-900 dark:text-white"
             >
               Cancel
-            </button>
+            </Button>
 
-            <button
+
+
+            <Button
               type="submit"
+              variant="danger"
+              className="flex-1"
               disabled={loading}
-              className="flex-1 py-3 rounded-2xl bg-violet-600 hover:bg-violet-700 text-white font-semibold"
             >
-              {loading
+
+              {
+                loading
                 ? "Saving..."
-                : "Change Password"}
-            </button>
+                : "Change Password"
+              }
+
+            </Button>
+
+
 
           </div>
 
+
+
         </form>
 
-      </div>
+
+      </Card>
+
 
     </div>
+
   );
+
 }
+
 
 export default ChangePasswordModal;

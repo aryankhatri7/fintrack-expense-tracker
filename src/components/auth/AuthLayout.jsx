@@ -21,7 +21,23 @@ function AuthLayout({
         <div className="grid w-full max-w-7xl overflow-hidden rounded-[36px] border border-slate-200/70 bg-white/70 shadow-[0_30px_80px_rgba(15,23,42,.08)] backdrop-blur-xl dark:border-slate-700/60 dark:bg-slate-900/70 lg:grid-cols-2">
 
           {/* Left Side */}
-          <div className="hidden lg:flex flex-col justify-between bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 p-12 text-white">
+          <div className="
+hidden
+lg:flex
+relative
+overflow-hidden
+flex-col
+justify-between
+
+bg-gradient-to-br
+from-emerald-600
+via-emerald-500
+to-cyan-500
+
+p-12
+
+text-white
+">
 
             <div>
 
@@ -46,11 +62,12 @@ function AuthLayout({
               </div>
 
               <h2 className="mt-16 text-5xl font-black leading-tight">
-                Take control of your finances.
+                Money management,
+made beautifully simple.
               </h2>
 
               <p className="mt-6 max-w-md text-lg text-white/80">
-                Track income, manage expenses, monitor savings and build better financial habits.
+                One dashboard for your income, expenses, budgets, savings and financial growth.
               </p>
 
             </div>

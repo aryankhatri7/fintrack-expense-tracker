@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { FiShield, FiTrendingUp, FiLock } from "react-icons/fi";
 
 function AuthLayout({
   title,
@@ -9,54 +10,116 @@ function AuthLayout({
   footerLinkTo,
 }) {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center px-4 py-10 transition-all duration-300">
+    <div className="relative min-h-screen overflow-hidden bg-slate-50 dark:bg-slate-950">
 
-      <div className="w-full max-w-md">
+      {/* Background */}
+      <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-emerald-400/20 blur-[140px]" />
+      <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-cyan-400/20 blur-[140px]" />
 
-        {/* Brand */}
-        <div className="text-center mb-8">
+      <div className="relative z-10 flex min-h-screen items-center justify-center px-6 py-10">
 
-          <h1 className="text-4xl font-bold text-violet-600">
-            FinTrack
-          </h1>
+        <div className="grid w-full max-w-7xl overflow-hidden rounded-[36px] border border-slate-200/70 bg-white/70 shadow-[0_30px_80px_rgba(15,23,42,.08)] backdrop-blur-xl dark:border-slate-700/60 dark:bg-slate-900/70 lg:grid-cols-2">
 
-          <p className="mt-2 text-slate-500 dark:text-slate-400">
-            Smart Personal Finance Management
-          </p>
+          {/* Left Side */}
+          <div className="hidden lg:flex flex-col justify-between bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 p-12 text-white">
 
-        </div>
+            <div>
 
-        {/* Card */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl border border-black/10 dark:border-white/10 shadow-xl p-8 transition-all duration-300">
+              <div className="flex items-center gap-4">
 
-          <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
-            {title}
-          </h2>
+                <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-white/15 backdrop-blur-xl text-3xl font-black">
+                  FT
+                </div>
 
-          <p className="mt-2 text-slate-500 dark:text-slate-400">
-            {subtitle}
-          </p>
+                <div>
 
-          <div className="mt-8">
-            {children}
+                  <h1 className="text-4xl font-black">
+                    FinTrack
+                  </h1>
+
+                  <p className="text-white/80">
+                    Smart Personal Finance
+                  </p>
+
+                </div>
+
+              </div>
+
+              <h2 className="mt-16 text-5xl font-black leading-tight">
+                Take control of your finances.
+              </h2>
+
+              <p className="mt-6 max-w-md text-lg text-white/80">
+                Track income, manage expenses, monitor savings and build better financial habits.
+              </p>
+
+            </div>
+
+            <div className="space-y-5">
+
+              <Feature icon={<FiShield />} text="Bank-level secure authentication" />
+
+              <Feature icon={<FiTrendingUp />} text="Powerful analytics & reports" />
+
+              <Feature icon={<FiLock />} text="Private & encrypted financial data" />
+
+            </div>
+
           </div>
 
-          <div className="mt-8 text-center text-sm text-slate-500 dark:text-slate-400">
+          {/* Right Side */}
+          <div className="flex items-center justify-center p-6 md:p-12">
 
-            {footerText}{" "}
+            <div className="w-full max-w-md">
 
-            <Link
-              to={footerLinkTo}
-              className="text-violet-600 hover:text-violet-700 font-semibold transition-colors"
-            >
-              {footerLinkText}
-            </Link>
+              <h2 className="text-4xl font-black text-slate-900 dark:text-white">
+                {title}
+              </h2>
+
+              <p className="mt-3 text-slate-500 dark:text-slate-400">
+                {subtitle}
+              </p>
+
+              <div className="mt-10">
+                {children}
+              </div>
+
+              <p className="mt-8 text-center text-sm text-slate-500 dark:text-slate-400">
+
+                {footerText}{" "}
+
+                <Link
+                  to={footerLinkTo}
+                  className="font-semibold text-emerald-600 hover:text-emerald-700"
+                >
+                  {footerLinkText}
+                </Link>
+
+              </p>
+
+            </div>
 
           </div>
 
         </div>
 
       </div>
+
+    </div>
+  );
+}
+
+function Feature({ icon, text }) {
+  return (
+    <div className="flex items-center gap-4 rounded-2xl bg-white/10 p-4 backdrop-blur-xl">
+
+      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 text-xl">
+        {icon}
+      </div>
+
+      <span className="font-medium">
+        {text}
+      </span>
 
     </div>
   );

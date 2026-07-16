@@ -1,5 +1,5 @@
 import { useContext } from "react";
-
+import Button from "./ui/Button";
 import {
   FiTrendingUp,
   FiTrendingDown,
@@ -32,37 +32,39 @@ function NetWorthCard({ onAddTransaction }) {
 
   return (
 
-    <section className="rounded-3xl overflow-hidden bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 shadow-2xl">
+    <section className="relative overflow-hidden rounded-[32px] border border-slate-200/70 bg-white/80 p-8 backdrop-blur-xl shadow-[0_20px_60px_rgba(15,23,42,0.08)] dark:border-slate-700/60 dark:bg-slate-900/80">
+<div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-emerald-400/20 blur-[110px]" />
 
-      <div className="p-6 md:p-8">
+<div className="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-cyan-400/20 blur-[110px]" />
+      <div className="relative z-10">
 
         {/* Header */}
         <div className="flex items-center justify-between">
 
           <div>
 
-            <p className="text-white/70 uppercase tracking-wider text-sm">
-              Net Worth
-            </p>
+            <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+Net Worth
+</p>
 
-            <h1 className="mt-3 text-4xl md:text-5xl font-bold text-white break-words">
+            <h1 className="mt-3 text-4xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-white break-words">
               {formatCurrency(balance)}
             </h1>
 
           </div>
 
-          <div className="rounded-2xl bg-white/15 backdrop-blur-md p-4">
+          <div className="rounded-2xl bg-emerald-500/10 text-emerald-500 backdrop-blur-md p-4">
 
-            <FiDollarSign className="text-3xl text-white" />
+            <FiDollarSign className="text-3xl text-emerald-500" />
 
           </div>
 
         </div>
 
         {/* Health Badge */}
-        <div className="mt-8 flex flex-wrap items-center gap-4">
+        <div className="mt-10 flex flex-wrap items-center gap-5">
 
-          <span className="rounded-full bg-white/15 backdrop-blur-md px-4 py-2 text-sm font-medium text-white">
+          <span className="rounded-full bg-emerald-500/10 text-emerald-500 backdrop-blur-md px-4 py-2 text-sm font-medium">
             {savingsRate}% Savings Rate
           </span>
 
@@ -81,20 +83,21 @@ function NetWorthCard({ onAddTransaction }) {
           </span>
 
         </div>
-<button
+<Button
+  variant="primary"
   onClick={onAddTransaction}
-  className="mt-6 rounded-2xl bg-white px-6 py-3 font-semibold text-violet-700 shadow-lg transition hover:scale-105"
+  className="mt-6"
 >
   + Add Transaction
-</button>
+</Button>
         {/* Metrics */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
 
-          <div className="rounded-2xl bg-white/10 backdrop-blur-md p-5">
+          <div className="rounded-3xl border border-slate-200/70 dark:border-slate-700/60 bg-white/60 dark:bg-slate-900/50 backdrop-blur-xl p-6">
 
             <div className="flex items-center justify-between">
 
-              <p className="text-white/70 text-sm">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 Income
               </p>
 
@@ -102,13 +105,13 @@ function NetWorthCard({ onAddTransaction }) {
 
             </div>
 
-            <h3 className="mt-3 text-2xl font-bold text-white">
+            <h3 className="mt-3 text-2xl font-black text-slate-900 dark:text-white">
               {formatCurrency(income)}
             </h3>
 
           </div>
 
-          <div className="rounded-2xl bg-white/10 backdrop-blur-md p-5">
+          <div className="rounded-3xl border border-slate-200/70 dark:border-slate-700/60 bg-white/60 dark:bg-slate-900/50 backdrop-blur-xl p-6">
 
             <div className="flex items-center justify-between">
 
@@ -126,7 +129,7 @@ function NetWorthCard({ onAddTransaction }) {
 
           </div>
 
-          <div className="rounded-2xl bg-white/10 backdrop-blur-md p-5">
+          <div className="rounded-3xl border border-slate-200/70 dark:border-slate-700/60 bg-white/60 dark:bg-slate-900/50 backdrop-blur-xl p-6">
 
             <div className="flex items-center justify-between">
 
@@ -149,7 +152,7 @@ function NetWorthCard({ onAddTransaction }) {
         {/* Progress */}
         <div className="mt-8">
 
-          <div className="flex justify-between text-white/70 text-sm mb-2">
+          <div className="flex justify-between text-slate-500 dark:text-slate-400 text-sm mb-2">
 
             <span>Financial Health</span>
 
@@ -157,10 +160,10 @@ function NetWorthCard({ onAddTransaction }) {
 
           </div>
 
-          <div className="w-full h-3 rounded-full bg-white/20 overflow-hidden">
+          <div className="w-full h-3 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden">
 
             <div
-              className="h-full rounded-full bg-white transition-all duration-700"
+              className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 transition-all duration-700"
               style={{
                 width: `${score}%`,
               }}
@@ -171,13 +174,13 @@ function NetWorthCard({ onAddTransaction }) {
         </div>
 
         {/* Insight */}
-        <div className="mt-8 rounded-2xl bg-white/10 backdrop-blur-md p-5">
+        <div className="mt-8 rounded-3xl border border-slate-200/70 dark:border-slate-700/60 bg-white/60 dark:bg-slate-900/50 backdrop-blur-xl p-6">
 
-          <p className="text-white/70 text-sm uppercase tracking-wide">
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
             Financial Insight
           </p>
 
-          <p className="mt-3 text-white text-lg leading-relaxed">
+          <p className="mt-3 text-base leading-7 text-slate-700 dark:text-slate-300">
 
             {score >= 80 &&
               `Excellent work! You're saving ${savingsRate}% of your income this month. Keep it up! 🎉`}

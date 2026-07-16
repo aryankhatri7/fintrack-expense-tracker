@@ -1,14 +1,35 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import {
+  FiUser,
+  FiMail,
+  FiLock,
+  FiEye,
+  FiEyeOff,
+} from "react-icons/fi";
+
 import { toast } from "react-toastify";
 
 import AuthLayout from "../components/auth/AuthLayout";
+import Input from "../components/ui/Input";
+import Button from "../components/ui/Button";
+
 import { useAuth } from "../context/AuthContext";
 
 function Register() {
   const [name, setName] = useState("");
+
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
+  const [password, setPassword] =
+    useState("");
+
+  const [showPassword, setShowPassword] =
+    useState(false);
+
+  const [loading, setLoading] =
+    useState(false);
 
   const { register } = useAuth();
 
@@ -17,16 +38,23 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setLoading(true);
+
     try {
       await register(name, email, password);
 
-      toast.success("Account created successfully!");
+      toast.success(
+        "Account created successfully!"
+      );
 
       navigate("/dashboard");
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "Registration failed"
+        error.response?.data?.message ||
+          "Registration failed"
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -38,59 +66,101 @@ function Register() {
       footerLinkText="Sign In"
       footerLinkTo="/login"
     >
-      <form onSubmit={handleSubmit} className="space-y-5">
-
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-6"
+      >
         {/* Name */}
+
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+
+          <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
             Full Name
           </label>
 
-          <input
+          <Input
             type="text"
             placeholder="Enter your full name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-3 rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-violet-500 transition-all"
+            onChange={(e) =>
+              setName(e.target.value)
+            }
+            leftIcon={<FiUser size={20} />}
           />
+
         </div>
 
         {/* Email */}
+
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-            Email
+
+          <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+            Email Address
           </label>
 
-          <input
+          <Input
             type="email"
             placeholder="Enter your email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-3 rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-violet-500 transition-all"
+            onChange={(e) =>
+              setEmail(e.target.value)
+            }
+            leftIcon={<FiMail size={20} />}
           />
+
         </div>
 
         {/* Password */}
+
         <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+
+          <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
             Password
           </label>
 
-          <input
-            type="password"
-            placeholder="Create a password"
+          <Input
+            type={
+              showPassword
+                ? "text"
+                : "password"
+            }
+            placeholder="Create a strong password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-3 rounded-2xl border border-black/10 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-violet-500 transition-all"
+            onChange={(e) =>
+              setPassword(e.target.value)
+            }
+            leftIcon={<FiLock size={20} />}
+            rightIcon={
+              <button
+                type="button"
+                onClick={() =>
+                  setShowPassword(
+                    !showPassword
+                  )
+                }
+                className="text-slate-400 transition hover:text-emerald-500"
+              >
+                {showPassword ? (
+                  <FiEyeOff size={20} />
+                ) : (
+                  <FiEye size={20} />
+                )}
+              </button>
+            }
           />
+
         </div>
 
-        <button
+        <Button
           type="submit"
-          className="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-3 rounded-2xl transition-all duration-300"
+          disabled={loading}
+          className="w-full"
+          size="lg"
         >
-          Create Account
-        </button>
+          {loading
+            ? "Creating Account..."
+            : "Create Account"}
+        </Button>
 
       </form>
     </AuthLayout>

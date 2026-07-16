@@ -14,44 +14,70 @@ function AppLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-white dark:bg-slate-950 transition-all duration-300 overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden bg-slate-50 dark:bg-slate-950">
 
-      <Sidebar
-        sidebarOpen={sidebarOpen}
-        setSidebarOpen={setSidebarOpen}
-      />
+      {/* Background Glow */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
 
-      <div className="flex-1 p-4 md:p-6 lg:p-8 transition-all duration-300 overflow-x-hidden">
+        <div className="absolute -top-40 -left-32 h-96 w-96 rounded-full bg-emerald-400/10 blur-[120px]" />
 
-        <Header
+        <div className="absolute top-1/2 -right-32 h-[420px] w-[420px] rounded-full bg-cyan-400/10 blur-[140px]" />
+
+      </div>
+
+      <div className="relative z-10 flex min-h-screen">
+
+        {/* Sidebar */}
+        <Sidebar
+          sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
         />
 
-        <Routes>
+        {/* Main Content */}
+        <main className="flex flex-1 flex-col overflow-hidden">
 
-          <Route index element={<Dashboard />} />
+          <div className="flex-1 px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
 
-          <Route
-            path="analytics"
-            element={<Analytics />}
-          />
+            <Header
+              setSidebarOpen={setSidebarOpen}
+            />
 
-          <Route
-            path="transactions"
-            element={<Transactions />}
-          />
+            <div className="mt-8">
 
-          <Route
-            path="budget"
-            element={<Budget />}
-          />
+              <Routes>
 
-          <Route
-            path="settings"
-            element={<Settings />}
-          />
+                <Route
+                  index
+                  element={<Dashboard />}
+                />
 
-        </Routes>
+                <Route
+                  path="analytics"
+                  element={<Analytics />}
+                />
+
+                <Route
+                  path="transactions"
+                  element={<Transactions />}
+                />
+
+                <Route
+                  path="budget"
+                  element={<Budget />}
+                />
+
+                <Route
+                  path="settings"
+                  element={<Settings />}
+                />
+
+              </Routes>
+
+            </div>
+
+          </div>
+
+        </main>
 
       </div>
 

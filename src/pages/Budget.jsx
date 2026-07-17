@@ -1,301 +1,240 @@
-import {
-  useContext,
-  useState,
-  useEffect,
-} from "react"
+import { useContext, useEffect, useState } from "react";
 
-import { TransactionContext }
-  from "../context/TransactionContext"
-import { formatCurrency }
-  from "../utils/formatCurrency"
+import {
+  FiTarget,
+  FiTrendingUp,
+  FiTrendingDown,
+  FiCalendar,
+  FiShield,
+  FiPieChart,
+  FiDollarSign,
+} from "react-icons/fi";
+
+import Card from "../components/ui/Card";
+import Button from "../components/ui/Button";
+
+import { TransactionContext } from "../context/TransactionContext";
+import { formatCurrency } from "../utils/formatCurrency";
+
 function Budget() {
 
-  const { transactions } =
-    useContext(TransactionContext)
+  const { transactions } = useContext(TransactionContext);
 
-  const [totalBudget, setTotalBudget] =
-    useState(() => {
+  const [totalBudget, setTotalBudget] = useState(() => {
+    const saved = localStorage.getItem("budget");
+    return saved ? Number(saved) : 5000;
+  });
 
-      const savedBudget =
-        localStorage.getItem("budget")
-
-      return savedBudget
-        ? Number(savedBudget)
-        : 5000
-
-    })
-
-  // Total Expenses
-  const spent = transactions
-    .filter(
-      (item) => item.type === "expense"
-    )
-    .reduce(
-      (total, item) =>
-        total + item.amount,
-      0
-    )
-
-  // Save Budget
   useEffect(() => {
+    localStorage.setItem("budget", totalBudget);
+  }, [totalBudget]);
 
-    localStorage.setItem(
-      "budget",
-      totalBudget
-    )
+  const income = transactions
+    .filter((item) => item.type === "income")
+    .reduce((sum, item) => sum + item.amount, 0);
 
-  }, [totalBudget])
+  const spent = transactions
+    .filter((item) => item.type === "expense")
+    .reduce((sum, item) => sum + item.amount, 0);
 
-  const remaining =
-    totalBudget - spent
+  const remaining = totalBudget - spent;
 
   const progress =
     totalBudget > 0
       ? (spent / totalBudget) * 100
-      : 0
-const today = new Date();
+      : 0;
 
-const currentDay = today.getDate();
+  const today = new Date();
 
-const dailyAverage =
-  currentDay > 0
-    ? (spent / currentDay).toFixed(0)
-    : 0;
+  const currentDay = today.getDate();
 
-  const remainingPercent =
-    Math.max(0, 100 - progress).toFixed(0)
+  const daysInMonth = new Date(
+    today.getFullYear(),
+    today.getMonth() + 1,
+    0
+  ).getDate();
 
+  const daysRemaining =
+    daysInMonth - currentDay + 1;
 
+  const dailyAverage =
+    currentDay
+      ? spent / currentDay
+      : 0;
 
-const daysInMonth = new Date(
-  today.getFullYear(),
-  today.getMonth() + 1,
-  0
-).getDate();
+  const safeDailySpend =
+    daysRemaining > 0
+      ? Math.max(
+          0,
+          remaining / daysRemaining
+        )
+      : 0;
 
-const daysRemaining =
-  daysInMonth - today.getDate() + 1;
+  const status =
+    progress < 50
+      ? "Healthy"
+      : progress < 80
+      ? "Warning"
+      : "Critical";
 
-const safeToSpend =
-  daysRemaining > 0
-    ? Math.max(
-        0,
-        remaining / daysRemaining
-      ).toFixed(0)
-    : 0;
+  const progressColor =
+    progress < 50
+      ? "bg-emerald-500"
+      : progress < 80
+      ? "bg-amber-500"
+      : "bg-red-500";
 
   return (
 
-    <div className="space-y-6 md:space-y-8">
+    <div className="space-y-8">
 
-  
+      {/* Header */}
 
-      {/* Main Card */}
-      <div className="bg-white dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-3xl p-5 md:p-8 transition-all duration-300">
+<div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
 
-        {/* Top Section */}
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+  <div>
 
-          {/* Budget Input */}
-          <div className="min-w-0">
+    <span className="inline-flex items-center rounded-full bg-emerald-500/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-emerald-500">
 
-            <p className="text-slate-500 dark:text-white/50 text-sm">
-              Monthly Budget
-            </p>
+      Budget Planning
 
-            <div className="flex items-center mt-2">
+    </span>
 
-  <span className="text-slate-900 dark:text-white text-3xl sm:text-4xl md:text-5xl font-bold mr-2">
-    ₹
-  </span>
+    <h1 className="mt-5 text-5xl font-black tracking-tight text-slate-900 dark:text-white">
 
-  <input
-    type="number"
-    value={totalBudget}
-    onChange={(e) =>
-      setTotalBudget(
-        Number(e.target.value)
-      )
-    }
-    min="0"
-    className="bg-transparent text-slate-900 dark:text-white text-3xl sm:text-4xl md:text-5xl font-bold outline-none w-full"
-  />
+      Control Every Rupee
+
+    </h1>
+
+    <p className="mt-3 max-w-2xl text-slate-500 dark:text-slate-400 leading-7">
+
+      Track your monthly budget, monitor spending and make smarter financial decisions with real-time insights.
+
+    </p>
+
+  </div>
 
 </div>
 
-          </div>
 
-          {/* Remaining */}
-          <div className="lg:text-right">
 
-            <p className="text-slate-500 dark:text-white/50 text-sm">
-              Remaining
-            </p>
+{/* Hero Card */}
 
-            <h2 className="text-green-400 text-3xl sm:text-4xl font-bold mt-2 break-words">
-              {formatCurrency(remaining)}
-            </h2>
+<div className="relative overflow-hidden rounded-[36px] bg-gradient-to-br from-emerald-600 via-emerald-500 to-cyan-500 p-8 md:p-10 shadow-2xl">
 
-          </div>
+  <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
 
-        </div>
+  <div className="absolute -left-16 bottom-0 h-56 w-56 rounded-full bg-cyan-300/20 blur-3xl" />
 
-        {/* Progress */}
-        <div className="mt-8 md:mt-10">
+  <div className="relative">
 
-          <div className="flex items-center justify-between mb-3 gap-4">
+    <div className="flex flex-col xl:flex-row xl:justify-between gap-10">
 
-            <p className="text-slate-500 dark:text-white/60 text-sm md:text-base">
-              Budget Usage
-            </p>
+      {/* Left */}
 
-            <p className="text-slate-900 dark:text-white font-semibold whitespace-nowrap">
-              {Math.min(progress, 100).toFixed(0)}%
-            </p>
+      <div className="flex-1">
 
-          </div>
+        <p className="uppercase tracking-[5px] text-white/70 text-xs">
 
-          <div className="w-full h-4 bg-black/10 dark:bg-white/10 rounded-full overflow-hidden">
+          MONTHLY LIMIT
 
-            <div
-              className={`h-full rounded-full transition-all duration-500 ${
-                Math.min(progress, 100) < 50
-                  ? "bg-green-500"
-                  : progress < 80
-                  ? "bg-yellow-500"
-                  : "bg-red-500"
-              }`}
-              style={{
-                width: `${Math.min(progress, 100)}%`,
-              }}
-            />
+        </p>
 
-          </div>
+        <div className="mt-5 flex items-center">
+
+          <span className="mr-3 text-6xl font-black text-white">
+
+            ₹
+
+          </span>
+
+          <input
+            type="number"
+            min="0"
+            value={totalBudget}
+            onChange={(e) =>
+              setTotalBudget(Number(e.target.value))
+            }
+            className="w-full bg-transparent text-6xl font-black text-white outline-none placeholder:text-white/40"
+          />
 
         </div>
 
-        {/* Warning */}
-        {progress >= 100 && (
+        <p className="mt-6 max-w-lg text-white/80 leading-7">
 
-          <div className="bg-red-500/10 border border-red-500/20 rounded-3xl p-5 mt-8">
+          Your budget updates instantly as you add expenses, helping you stay on track throughout the month.
 
-            <h3 className="text-red-400 text-xl md:text-2xl font-bold">
-              Budget Limit Exceeded
-            </h3>
+        </p>
 
-            <p className="text-red-300 mt-2 text-sm md:text-base">
-              Your expenses have crossed your monthly budget.
-            </p>
+      </div>
 
-          </div>
 
-        )}
 
-        {/* Analytics Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mt-8">
+      {/* Right Stats */}
 
-          <div className="bg-slate-50 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl p-5">
+      <div className="grid w-full gap-5 sm:grid-cols-2 xl:w-[420px]">
 
-            <p className="text-slate-500 dark:text-white/50 text-sm">
-              Daily Average
-            </p>
+        <div className="rounded-3xl bg-white/15 backdrop-blur-xl p-5">
 
-            <h3 className="text-slate-900 dark:text-white text-2xl md:text-3xl font-bold mt-2">
-              {formatCurrency(Number(dailyAverage))}
-            </h3>
+          <p className="text-sm text-white/70">
 
-          </div>
+            Remaining
 
-          <div className="bg-slate-50 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl p-5">
+          </p>
 
-            <p className="text-slate-500 dark:text-white/50 text-sm">
-              Remaining %
-            </p>
+          <h3 className="mt-2 text-3xl font-black text-white">
 
-            <h3 className="text-violet-400 text-2xl md:text-3xl font-bold mt-2">
-              {remainingPercent}%
-            </h3>
+            {formatCurrency(remaining)}
 
-          </div>
-
-          {/* Safe Daily Spend */}
-<div className="bg-slate-50 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl p-5">
-
-  <p className="text-slate-500 dark:text-white/50 text-sm">
-    Safe Daily Spend
-  </p>
-
-  <h3 className="text-green-400 text-2xl md:text-3xl font-bold mt-2">
-    {formatCurrency(Number(safeToSpend))}
-  </h3>
-
-</div>
-
-{/* Days Remaining */}
-<div className="bg-slate-50 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-2xl p-5">
-
-  <p className="text-slate-500 dark:text-white/50 text-sm">
-    Days Remaining
-  </p>
-
-  <h3 className="text-blue-400 text-2xl md:text-3xl font-bold mt-2">
-    {daysRemaining} Days
-  </h3>
-
-</div>
+          </h3>
 
         </div>
 
-        {/* Bottom Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mt-8 md:mt-10">
+        <div className="rounded-3xl bg-white/15 backdrop-blur-xl p-5">
 
-          <div className="bg-slate-50 dark:bg-white/5 rounded-2xl p-5 border border-black/10 dark:border-white/10">
+          <p className="text-sm text-white/70">
 
-            <p className="text-slate-500 dark:text-white/50 text-sm">
-              Total Spent
-            </p>
+            Spent
 
-            <h3 className="text-red-400 text-2xl md:text-3xl font-bold mt-2">
-              {formatCurrency(spent)}
-            </h3>
+          </p>
 
-          </div>
+          <h3 className="mt-2 text-3xl font-black text-white">
 
-          <div className="bg-slate-50 dark:bg-white/5 rounded-2xl p-5 border border-black/10 dark:border-white/10">
+            {formatCurrency(spent)}
 
-            <p className="text-slate-500 dark:text-white/50 text-sm">
-              Savings
-            </p>
+          </h3>
 
-            <h3 className="text-green-400 text-2xl md:text-3xl font-bold mt-2">
-              {formatCurrency(remaining)}
-            </h3>
+        </div>
 
-          </div>
+        <div className="rounded-3xl bg-white/15 backdrop-blur-xl p-5">
 
-          <div className="bg-slate-50 dark:bg-white/5 rounded-2xl p-5 border border-black/10 dark:border-white/10">
+          <p className="text-sm text-white/70">
 
-            <p className="text-slate-500 dark:text-white/50 text-sm">
-              Status
-            </p>
+            Safe / Day
 
-            <h3
-              className={`text-2xl md:text-3xl font-bold mt-2 ${
-                progress < 50
-                  ? "text-green-400"
-                  : progress < 80
-                  ? "text-yellow-400"
-                  : "text-red-400"
-              }`}
-            >
-              {progress < 50
-                ? "Healthy"
-                : progress < 80
-                ? "Warning"
-                : "Critical"}
-            </h3>
+          </p>
 
-          </div>
+          <h3 className="mt-2 text-3xl font-black text-white">
+
+            {formatCurrency(safeDailySpend)}
+
+          </h3>
+
+        </div>
+
+        <div className="rounded-3xl bg-white/15 backdrop-blur-xl p-5">
+
+          <p className="text-sm text-white/70">
+
+            Days Left
+
+          </p>
+
+          <h3 className="mt-2 text-3xl font-black text-white">
+
+            {daysRemaining}
+
+          </h3>
 
         </div>
 
@@ -303,7 +242,229 @@ const safeToSpend =
 
     </div>
 
-  )
+
+
+    {/* Progress */}
+
+    <div className="mt-10">
+
+      <div className="mb-3 flex justify-between">
+
+        <span className="font-semibold text-white">
+
+          Budget Used
+
+        </span>
+
+        <span className="font-black text-white">
+
+          {Math.min(progress,100).toFixed(0)}%
+
+        </span>
+
+      </div>
+
+      <div className="h-4 overflow-hidden rounded-full bg-white/20">
+
+        <div
+          className={`${progressColor} h-full rounded-full transition-all duration-700`}
+          style={{
+            width: `${Math.min(progress,100)}%`,
+          }}
+        />
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+    {/* Analytics */}
+
+    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+
+      <Card className="p-6">
+
+        <div className="flex items-center justify-between">
+
+          <div>
+
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              Total Income
+            </p>
+
+            <h3 className="mt-3 text-3xl font-black text-emerald-500">
+              {formatCurrency(income)}
+            </h3>
+
+          </div>
+
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500/10 text-emerald-500">
+            <FiTrendingUp size={24} />
+          </div>
+
+        </div>
+
+      </Card>
+
+
+
+      <Card className="p-6">
+
+        <div className="flex items-center justify-between">
+
+          <div>
+
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              Total Expenses
+            </p>
+
+            <h3 className="mt-3 text-3xl font-black text-red-500">
+              {formatCurrency(spent)}
+            </h3>
+
+          </div>
+
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-500/10 text-red-500">
+            <FiTrendingDown size={24} />
+          </div>
+
+        </div>
+
+      </Card>
+
+
+
+      <Card className="p-6">
+
+        <div className="flex items-center justify-between">
+
+          <div>
+
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              Budget Health
+            </p>
+
+            <h3
+              className={`mt-3 text-3xl font-black ${
+                status === "Healthy"
+                  ? "text-emerald-500"
+                  : status === "Warning"
+                  ? "text-amber-500"
+                  : "text-red-500"
+              }`}
+            >
+              {status}
+            </h3>
+
+          </div>
+
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-500/10 text-cyan-500">
+            <FiShield size={24} />
+          </div>
+
+        </div>
+
+      </Card>
+
+
+
+      <Card className="p-6">
+
+        <div className="flex items-center justify-between">
+
+          <div>
+
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              Daily Average
+            </p>
+
+            <h3 className="mt-3 text-3xl font-black text-indigo-500">
+              {formatCurrency(dailyAverage)}
+            </h3>
+
+          </div>
+
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-500">
+            <FiCalendar size={24} />
+          </div>
+
+        </div>
+
+      </Card>
+
+    </div>
+
+
+
+    {/* Smart Insight */}
+
+    <Card className="overflow-hidden p-0">
+
+      <div className="bg-gradient-to-r from-slate-900 to-slate-800 p-8 text-white dark:from-slate-800 dark:to-slate-900">
+
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+
+          <div>
+
+            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-500/20 px-4 py-2 text-sm font-semibold text-emerald-300">
+
+              <FiPieChart />
+
+              Smart Budget Insight
+
+            </div>
+
+            <h2 className="mt-5 text-3xl font-black">
+
+              AI Budget Recommendation
+
+            </h2>
+
+            <p className="mt-4 max-w-2xl text-slate-300 leading-7">
+
+              To comfortably finish this month within your budget,
+              try to keep your daily expenses below the recommended amount.
+
+            </p>
+
+          </div>
+
+
+
+          <div className="rounded-3xl bg-white/10 p-8 backdrop-blur-xl">
+
+            <p className="text-sm uppercase tracking-wider text-slate-300">
+
+              Recommended Daily Spend
+
+            </p>
+
+            <h2 className="mt-3 text-5xl font-black text-emerald-400">
+
+              {formatCurrency(safeDailySpend)}
+
+            </h2>
+
+            <p className="mt-4 text-slate-300">
+
+              {daysRemaining} day(s) remaining this month
+
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </Card>
+
+  </div>
+
+);
+
 }
 
-export default Budget
+export default Budget;
